@@ -28,6 +28,10 @@ private_build_requires = ["rezutil-1"]
 @early()
 def rez_bin_path():
     import subprocess
+    building = globals()["building"]
+
+    if not building:
+        return ""
 
     # The stdout from `rez-env` may content outputs from rcfile
     # (bash startup script), so we add `tag` to extract the data

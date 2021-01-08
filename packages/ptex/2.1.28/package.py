@@ -1,11 +1,10 @@
 
 name = "ptex"
 
-version = "2.1.28"
+version = "2.1.28-m1"
 
 variants = [
-    ["arch-*", "os-*", "release-1"],
-    ["arch-*", "os-*", "release-0"],
+    ["arch-*", "os-*"],
 ]
 
 build_requires = [

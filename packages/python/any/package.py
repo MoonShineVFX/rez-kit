@@ -24,15 +24,20 @@ def version():
         # message without rez-build's.
         return ""
 
-    parser = argparse.ArgumentParser()
+    building = globals()["building"]
 
-    with open("./parse_build_args.py", "r") as add_args:
-        exec(add_args.read(), {"parser": parser})
+    if building:
+        parser = argparse.ArgumentParser()
 
-    args, unknown = parser.parse_known_args()  # parse `sys.argv`
-    python_version = args.version + local_patch
+        with open("./parse_build_args.py", "r") as add_args:
+            exec(add_args.read(), {"parser": parser})
 
-    return python_version
+        args, unknown = parser.parse_known_args()  # parse `sys.argv`
+        python_version = args.version + local_patch
+
+        return python_version
+    else:
+        return None
 
 
 tools = [

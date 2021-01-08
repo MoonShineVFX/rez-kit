@@ -2,7 +2,7 @@
 
 name = "pyidle"
 
-version = "1.0.0"
+version = "1.0.0-m1"
 
 description = "Python IDLE"
 

@@ -14,6 +14,7 @@ requires = []
 @early()
 def variants():
     from rez import packages
+    building = globals()["building"]
 
     bindings = [
         "PyQt5",
@@ -23,7 +24,7 @@ def variants():
         [binding] for binding in bindings
         if packages.get_latest_package_from_string(binding)
     ]
-    if not variants_:
+    if building and not variants_:
         raise Exception("No Qt binding package found.")
 
     return variants_
