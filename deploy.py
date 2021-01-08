@@ -54,28 +54,59 @@ def deploy_package(request, release=False):
     _bind("os", release)
     _bind("arch", release)
     _bind("platform", release)
+
     _developer_packages_to_memory()
 
-    requested_package = find_developer_package(request)
+    implicit_pkgs = [PackageRequest(x) for x in config.implicit_packages]
+    implicit_pkgs = list(map(PackageRequest, config.implicit_packages))
 
-    implicit_packages = [
-        PackageRequest(x) for x in config.implicit_packages
-    ]
     if release:
         package_paths = config.nonlocal_packages_path + [_memory]
     else:
         package_paths = config.packages_path + [_memory]
 
-    for variant in requested_package.iter_variants():
-        package_requests = variant.get_requires(build_requires=True,
+    def dependencies_to_deploy(name):
+        """"""
+        to_install = list()
+
+        pkg_to_deploy = find_developer_package(name)
+        if pkg_to_deploy is None:
+            variants = []
+        else:
+            variants = pkg_to_deploy.iter_variants()
+
+        for variant in variants:
+            pkg_requests = variant.get_requires(build_requires=True,
                                                 private_build_requires=True)
 
-        context = ResolvedContext(package_requests + implicit_packages,
-                                  building=True,
-                                  package_paths=package_paths)
+            context = ResolvedContext(pkg_requests + implicit_pkgs,
+                                      building=True,
+                                      package_paths=package_paths)
 
-        for package in context.resolved_packages:
-            print(package.qualified_package_name)
+            for package in context.resolved_packages:
+                dep_name = package.qualified_package_name
+                family = package.parent
+
+                if family.repository.name() == "memory":
+                    # need install
+                    to_install += dependencies_to_deploy(dep_name)
+
+                else:
+                    # already installed
+                    print(" ", package.qualified_package_name)
+                # print(type(package))
+                # print(dir(package))
+                # print(package.parent.repository.name())
+                # print(package.repository)
+                # print(package.resource)
+                # print(package.root)
+                # break
+                # print(package.qualified_package_name)
+
+        to_install.append(name)
+        return to_install
+
+    print(dependencies_to_deploy(request))
 
 
 def _memory_repository(packages):
