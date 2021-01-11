@@ -16,7 +16,7 @@ def version():
 
 
 variants = [
-    ["platform-*"],
+    ["platform"],
 ]
 
 build_command = "python {root}/rezbuild.py {install}"

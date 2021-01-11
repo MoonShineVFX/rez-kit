@@ -3,8 +3,7 @@ name = "rezutil"
 
 version = "1.4.5-m1"
 
-
-# build with bez build system
+build_command = "python {root}/rezbuild.py {install}"
 
 
 def commands():
