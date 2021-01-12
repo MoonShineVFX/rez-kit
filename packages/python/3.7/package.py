@@ -8,7 +8,7 @@ authors = ["Guido van Rossum"]
 
 description = "The Python programming language"
 
-version = "3.7-m1"
+version = "3.7.9-m1"
 
 tools = [
     "python",

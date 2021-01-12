@@ -68,6 +68,7 @@ def deploy_package(request, release=False):
 
     def dependencies_to_deploy(name):
         """"""
+        is_installed = False
         to_install = odict()
 
         pkg_to_deploy = get_latest_pkg_by_str(name, paths=package_paths)
@@ -76,13 +77,13 @@ def deploy_package(request, release=False):
             variants = []  # dev package might not exists
         else:
             name = pkg_to_deploy.qualified_name
+            variants = pkg_to_deploy.iter_variants()
 
             if in_memory(pkg_to_deploy):
                 uri = pkg_to_deploy.data.get("_uri", "??")
-                variants = pkg_to_deploy.iter_variants()
             else:
                 uri = pkg_to_deploy.uri
-                variants = []  # already installed, escape early
+                is_installed = True
 
         for variant in variants:
             pkg_requests = variant.get_requires(build_requires=True,
@@ -103,26 +104,34 @@ def deploy_package(request, release=False):
                     # already installed
                     pass
 
-        to_install[name] = uri
+        if not is_installed:
+            to_install[name] = uri
+
         return to_install
 
     dependencies = dependencies_to_deploy(request)
-    _max_name_len = len(max(dependencies.keys()))
 
-    print("\nFollowing packages will be deployed:")
-    print("-" * 70)
-    for q_name, _uri in dependencies.items():
-        line = " %%-%ds -> %%s" % _max_name_len
-        print(line % (q_name, _uri))
+    if dependencies:
+        _max_name_len = len(max(dependencies.keys()))
 
-    # Deploy
-    for q_name, _uri in dependencies.items():
-        if release:
-            args = ["rez-release"]
-        else:
-            args = ["rez-build", "--install"]
+        print("\nFollowing packages will be deployed:")
+        print("-" * 70)
+        for q_name, _uri in dependencies.items():
+            line = " %%-%ds -> %%s" % _max_name_len
+            print(line % (q_name, _uri))
+        # TODO: Add user confirm dialog
 
-        subprocess.check_call(args, cwd=os.path.dirname(_uri))
+        # Deploy
+        for q_name, _uri in dependencies.items():
+            if release:
+                args = ["rez-release"]
+            else:
+                args = ["rez-build", "--install"]
+
+            subprocess.check_call(args, cwd=os.path.dirname(_uri))
+
+    else:
+        print("Package %r already been installed." % request)
 
 
 def _memory_repository(packages):

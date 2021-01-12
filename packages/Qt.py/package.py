@@ -27,8 +27,15 @@ def variants():
         [binding] for binding in bindings
         if packages.get_latest_package_from_string(binding)
     ]
-    if building and not variants_:
-        raise Exception("No Qt binding package found.")
+
+    if not variants_:
+        if building:
+            raise Exception("No Qt binding package found.")
+        else:
+            variants_ += [
+                ["PySide2"],
+                ["PySide"],
+            ]
 
     return variants_
 
