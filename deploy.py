@@ -2,7 +2,7 @@
 import os
 import subprocess
 from collections import OrderedDict as odict
-from gitz import git
+from gitz import git, lib
 
 from rez.config import config
 from rez.utils.formatting import PackageRequest
@@ -47,7 +47,7 @@ def list_developer_packages():
 _memory = "memory@any"
 
 
-def deploy_package(request, release=False):
+def deploy_package(request, release=False, yes=False):
     _bind("os", release)
     _bind("arch", release)
     _bind("platform", release)
@@ -119,7 +119,10 @@ def deploy_package(request, release=False):
         for q_name, _uri in dependencies.items():
             line = " %%-%ds -> %%s" % _max_name_len
             print(line % (q_name, _uri))
-        # TODO: Add user confirm dialog
+
+        proceed = yes or lib.confirm("Do you want to continue ? [Y/n]\n")
+        if not proceed:
+            print("Cancelled")
 
         # Deploy
         for q_name, _uri in dependencies.items():
