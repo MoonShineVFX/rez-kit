@@ -2,7 +2,7 @@
 import os
 import subprocess
 from collections import OrderedDict as odict
-from gitz import git, lib
+from kitz import git, lib
 
 from rez.config import config
 from rez.utils.formatting import PackageRequest
@@ -10,7 +10,6 @@ from rez.package_repository import package_repository_manager
 from rez.resolved_context import ResolvedContext
 from rez.packages import (
     iter_package_families,
-    get_developer_package,
     get_latest_package_from_string as get_latest_pkg_by_str,
 )
 
@@ -31,37 +30,59 @@ _pkg_repos = [
 ]
 
 
-def list_developer_packages():
-    packages = list()
-
-    for family in iter_package_families(paths=_dev_dirs):
-        for package in family.iter_packages():
-            pkg_dir = os.path.dirname(package.uri)
-            package = get_developer_package(pkg_dir)
-
-            packages.append(package)
-
-    return packages
-
-
 _memory = "memory@any"
 
 
-def deploy_package(request, release=False, yes=False):
+def print_developer_packages(requests):
+    requests = requests or []
+    _before_deploy()
+
+    names = list()
+    for request in requests:
+        pkg = get_latest_pkg_by_str(request, paths=[_memory])
+        if pkg is None:
+            print("Package not found in this repository: %s" % request)
+            continue
+        names.append(pkg.name)
+
+    print("\nPackages available in this repository:")
+    print("=" * 30)
+
+    for family in iter_package_families(paths=[_memory]):
+        if not requests:
+            print(family.name)
+        else:
+            if family.name not in names:
+                continue
+
+            for package in family.iter_packages():
+                print(package.qualified_name)
+
+
+def deploy_packages(requests, release=False, yes=False):
     _bind("os", release)
     _bind("arch", release)
     _bind("platform", release)
 
-    _git_clone_packages()
-    _developer_packages_to_memory()
-
-    implicit_pkgs = [PackageRequest(x) for x in config.implicit_packages]
-    implicit_pkgs = list(map(PackageRequest, config.implicit_packages))
+    _before_deploy()
 
     if release:
         package_paths = config.nonlocal_packages_path + [_memory]
     else:
         package_paths = config.packages_path + [_memory]
+
+    for request in requests:
+        print("Processing deploy request: %s .." % request)
+        _deploy_package(request, package_paths, release, yes)
+
+
+def _before_deploy():
+    _git_clone_packages()
+    _developer_packages_to_memory()
+
+
+def _deploy_package(request, package_paths=None, release=False, yes=False):
+    implicit_pkgs = list(map(PackageRequest, config.implicit_packages))
 
     def in_memory(pkg):
         return pkg.parent.repository.name() == "memory"
@@ -186,7 +207,32 @@ def _bind(name, release=False):
 
 
 if __name__ == "__main__":
-    # deploy_package("usd-20.08", release=True)
-    # deploy_package("maya-2020")
-    deploy_package("Qt.py")
-    # deploy_package("rez")
+    # TODO: ensure vcs plugin "kit" is loaded on package release
+    import sys
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("packages", nargs="*",
+                        help="Package names to deploy.")
+    parser.add_argument("--release", action="store_true",
+                        help="Deploy to package releasing location.")
+    parser.add_argument("--yes", action="store_true",
+                        help="Yes to all.")
+    parser.add_argument("--list", action="store_true",
+                        help="List out packages that can be deployed. If "
+                        "`packages` given, versions will be listed.")
+
+    opt = parser.parse_args()
+
+    if opt.list:
+        print_developer_packages(opt.packages)
+        sys.exit(0)
+
+    if opt.packages:
+        deploy_packages(opt.packages, opt.release, opt.yes)
+        print("=" * 30)
+        print("SUCCESS!\n")
+
+    else:
+        print("Please name at least one package to deploy. Use --list to "
+              "view available packages.")
