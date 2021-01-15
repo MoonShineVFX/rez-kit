@@ -4,7 +4,7 @@ name = "libjpeg_turbo"
 version = "1.5.1-m1"
 
 variants = [
-    ["arch-*", "os-*"],
+    ["arch", "os"],
 ]
 
 build_requires = [

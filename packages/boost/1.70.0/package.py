@@ -9,7 +9,7 @@ description = \
     """
 
 variants = [
-    ["arch-*", "os-*"],
+    ["arch", "os"],
 ]
 
 build_requires = [

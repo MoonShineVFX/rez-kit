@@ -9,10 +9,10 @@ requires = [
 ]
 
 variants = [
-    ["platform-*", "maya-2018", "python-2.7", "release-1"],
-    ["platform-*", "maya-2020", "python-2.7", "release-1"],
-    ["platform-*", "maya-2018", "python-2.7", "release-0"],
-    ["platform-*", "maya-2020", "python-2.7", "release-0"],
+    ["platform", "maya-2018", "python-2.7", "release-1"],
+    ["platform", "maya-2020", "python-2.7", "release-1"],
+    ["platform", "maya-2018", "python-2.7", "release-0"],
+    ["platform", "maya-2020", "python-2.7", "release-0"],
 ]
 
 build_requires = [

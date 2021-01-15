@@ -15,9 +15,9 @@ requires = [
 ]
 
 variants = [
-    # ["platform-*", "houdini-16.5.634"],
-    # ["platform-*", "houdini-17.0.416"],
-    ["platform-*", "houdini-17.0.459"],
+    # ["platform", "houdini-16.5.634"],
+    # ["platform", "houdini-17.0.416"],
+    ["platform", "houdini-17.0.459"],
 ]
 
 tools = [

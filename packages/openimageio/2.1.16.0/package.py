@@ -4,7 +4,7 @@ name = "openimageio"
 version = "2.1.16.0-m1"
 
 variants = [
-    ["arch-*", "os-*"],
+    ["arch", "os"],
 ]
 
 build_requires = [

@@ -4,7 +4,7 @@ name = "tbb"
 version = "2017.6-m1"
 
 variants = [
-    ["arch-*", "os-*"],
+    ["arch", "os"],
 ]
 
 build_requires = [

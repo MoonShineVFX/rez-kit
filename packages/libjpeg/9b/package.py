@@ -6,7 +6,7 @@ name = "libjpeg"
 version = "9b-m1"
 
 variants = [
-    ["arch-*", "os-*"],
+    ["arch", "os"],
 ]
 
 build_requires = [

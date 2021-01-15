@@ -8,9 +8,9 @@ requires = [
 ]
 
 variants = [
-    ["platform-*", "usd-20.05"],
-    ["platform-*", "usd-20.08"],
-    # ["platform-*", "houdini-18.0.532"],
+    ["platform", "usd-20.05"],
+    ["platform", "usd-20.08"],
+    # ["platform", "houdini-18.0.532"],
 ]
 
 build_requires = [

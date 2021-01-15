@@ -4,7 +4,7 @@ name = "hdf5"
 version = "1.10.0-m1"
 
 variants = [
-    ["arch-*", "os-*"],
+    ["arch", "os"],
 ]
 
 build_requires = [

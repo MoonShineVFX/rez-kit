@@ -4,7 +4,7 @@ name = "materialx"
 version = "1.37.1-m1"
 
 variants = [
-    ["arch-*", "os-*"],
+    ["arch", "os"],
 ]
 
 build_requires = [

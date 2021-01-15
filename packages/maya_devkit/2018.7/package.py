@@ -11,7 +11,7 @@ requires = [
 ]
 
 variants = [
-    ["platform-*"]
+    ["platform"]
 ]
 
 

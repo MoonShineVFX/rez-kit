@@ -8,7 +8,7 @@ requires = [
 ]
 
 variants = [
-    ["platform-*"]
+    ["platform"]
 ]
 
 private_build_requires = ["rezutil-1"]

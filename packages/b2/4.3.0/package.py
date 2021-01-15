@@ -6,7 +6,7 @@ version = "4.3.0-m1"
 description = "Boost build tool."
 
 variants = [
-    ["arch-*", "os-*"],
+    ["arch", "os"],
 ]
 
 tools = [
