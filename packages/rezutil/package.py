@@ -1,7 +1,7 @@
 
 name = "rezutil"
 
-version = "1.4.5-m1"
+version = "1.4.6-m1"
 
 build_command = "python {root}/rezbuild.py {install}"
 
