@@ -1,4 +1,4 @@
-# awesome-rez
+# rez-kit
 
 Better use Python 3.7
 
