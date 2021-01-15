@@ -5,7 +5,7 @@ ModifyList = globals()["ModifyList"]
 
 # Rez's default package path excluded
 local_packages_path = "~/rez/packages/install"
-release_packages_path = os.getenv("SHARE_RELEASE_PACKAGE_PATH",
+release_packages_path = os.getenv("SHARED_PACKAGES_PATH",
                                   "~/rez/packages/release")
 packages_path = [
     local_packages_path,
