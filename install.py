@@ -3,7 +3,7 @@ import os
 import sys
 import functools
 import subprocess
-from gitz import git, lib
+from kitz import git, lib
 
 
 REZ_URL = "https://github.com/nerdvegas/rez.git"
