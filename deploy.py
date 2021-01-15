@@ -164,6 +164,7 @@ def _developer_packages_to_memory():
 
 def _git_clone_packages():
     for repo in _pkg_repos:
+        # TODO: checkout latest
         git.clone(
             url=repo["url"],
             dst=os.path.join(_root, "downloads", repo["name"]),
