@@ -1,5 +1,6 @@
 
 import os
+ModifyList = globals()["ModifyList"]
 
 
 # Rez's default package path excluded
@@ -45,3 +46,8 @@ platform_map = {
         r"windows-10(.*)": r"windows-10.0",
     },
 }
+
+plugin_path = ModifyList(append=[
+    # The path *above* rezplugins/ directory
+    os.path.join(os.path.dirname(__file__), "kitz")
+])
