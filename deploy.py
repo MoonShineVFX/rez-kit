@@ -159,12 +159,14 @@ def _deploy_package(request, package_paths=None, release=False, yes=False):
         print("Package %r already been installed." % request)
 
 
-def _memory_repository(packages):
-    repository = package_repository_manager.get_repository(_memory)
-    repository.data = packages
-
-
 def _developer_packages_to_memory():
+    """Collect and save developer packages into memory repository
+
+    By making packages from developer packages, and saving them into Rez's
+    memory repository, we can then resolve requests to see if any package
+    is resolved from memory, and deployed it.
+
+    """
     packages = dict()
 
     for family in iter_package_families(paths=_dev_dirs):
@@ -185,7 +187,9 @@ def _developer_packages_to_memory():
 
         packages[name] = versions
 
-    _memory_repository(packages)
+    # save collected dev packages in memory repository
+    memory_repo = package_repository_manager.get_repository(_memory)
+    memory_repo.data = packages
 
 
 def _git_clone_packages():
