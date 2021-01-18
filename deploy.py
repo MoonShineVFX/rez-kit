@@ -7,6 +7,7 @@ from kitz import git, lib
 from rez.config import config
 from rez.utils.formatting import PackageRequest
 from rez.package_repository import package_repository_manager
+from rez.package_maker import PackageMaker
 from rez.resolved_context import ResolvedContext
 from rez.packages import (
     iter_package_families,
@@ -170,12 +171,16 @@ def _developer_packages_to_memory():
         name = family.name  # package dir name
         versions = dict()
 
-        for package in family.iter_packages():
-            data = package.data.copy()
+        for _pkg in family.iter_packages():
+            data = _pkg.data.copy()
             name = data["name"]  # real name in package.py
 
+            maker = PackageMaker(name, data=data)  # expand variant requires
+            package = maker.get_package()
+            data = package.data.copy()
+
+            data["_uri"] = _pkg.uri
             version = data.get("version", "")
-            data["_uri"] = package.uri
             versions[version] = data
 
         packages[name] = versions
