@@ -15,10 +15,10 @@ requires = [
 ]
 
 variants = [
-    # ["platform", "houdini-16.5.634"],
-    # ["platform", "houdini-17.0.506"],
-    # ["platform", "houdini-17.5.327"],
-    ["platform", "houdini-17.5.360"],
+    # ["platform-*", "houdini-16.5.634"],
+    # ["platform-*", "houdini-17.0.506"],
+    # ["platform-*", "houdini-17.5.327"],
+    ["platform-*", "houdini-17.5.360"],
 ]
 
 tools = [

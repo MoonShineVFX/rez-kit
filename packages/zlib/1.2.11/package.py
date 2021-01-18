@@ -4,7 +4,7 @@ name = "zlib"
 version = "1.2.11-m1"
 
 variants = [
-    ["arch", "os"],
+    ["arch-*", "os-*"],
 ]
 
 build_requires = [

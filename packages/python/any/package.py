@@ -47,7 +47,7 @@ tools = [
 ]
 
 variants = [
-    ["platform"],
+    ["platform-*"],
 ]
 
 

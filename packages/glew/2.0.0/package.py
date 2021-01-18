@@ -4,7 +4,7 @@ name = "glew"
 version = "2.0.0-m1"
 
 variants = [
-    ["arch", "os"],
+    ["arch-*", "os-*"],
 ]
 
 build_requires = [

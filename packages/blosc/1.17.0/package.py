@@ -4,8 +4,8 @@ name = "blosc"
 version = "1.17.0-m1"
 
 variants = [
-    ["arch", "os"],
-    ["arch", "os"],
+    ["arch-*", "os-*"],
+    ["arch-*", "os-*"],
 ]
 
 build_requires = [

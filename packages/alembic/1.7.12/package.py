@@ -4,7 +4,7 @@ name = "alembic"
 version = "1.7.12-m1"
 
 variants = [
-    ["arch", "os"],
+    ["arch-*", "os-*"],
 ]
 
 build_requires = [

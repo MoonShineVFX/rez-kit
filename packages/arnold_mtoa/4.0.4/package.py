@@ -14,9 +14,9 @@ requires = [
 ]
 
 variants = [
-    ["platform", "maya-2018"],
-    # ["platform", "maya-2019"],
-    ["platform", "maya-2020"],
+    ["platform-*", "maya-2018"],
+    # ["platform-*", "maya-2019"],
+    ["platform-*", "maya-2020"],
 ]
 
 tools = [

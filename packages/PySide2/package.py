@@ -9,7 +9,7 @@ version = "5.15-m1"
 requires = []
 
 variants = [
-    ["os", "python-3.7"],
+    ["os-*", "python-3.7"],
 ]
 
 pip_packages = [

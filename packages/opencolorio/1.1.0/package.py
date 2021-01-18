@@ -4,7 +4,7 @@ name = "opencolorio"
 version = "1.1.0-m1"
 
 variants = [
-    ["arch", "os"],
+    ["arch-*", "os-*"],
 ]
 
 build_requires = [

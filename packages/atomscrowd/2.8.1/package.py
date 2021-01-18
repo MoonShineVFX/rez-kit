@@ -14,8 +14,8 @@ requires = [
 ]
 
 variants = [
-    ["platform", "maya"],
-    # ["platform", "houdini-17.5.229"],
+    ["platform-*", "maya"],
+    # ["platform-*", "houdini-17.5.229"],
 ]
 
 private_build_requires = ["rezutil-1"]

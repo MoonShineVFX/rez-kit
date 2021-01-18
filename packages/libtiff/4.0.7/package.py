@@ -4,7 +4,7 @@ name = "libtiff"
 version = "4.0.7-m1"
 
 variants = [
-    ["arch", "os"],
+    ["arch-*", "os-*"],
 ]
 
 build_requires = [

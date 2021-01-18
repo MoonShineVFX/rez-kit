@@ -8,7 +8,7 @@ description = "Graphviz - Graph Visualization Software"
 url = "https://www.graphviz.org/"
 
 variants = [
-    ["platform"],
+    ["platform-*"],
 ]
 
 
