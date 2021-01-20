@@ -28,6 +28,11 @@ _pkg_repos = [
         "url": "https://github.com/davidlatwe/rez-pipz.git",
         "branch": "dev",
     },
+    {
+        "name": "house",
+        "url": "https://github.com/MoonShineVFX/rez-house.git",
+        # This is private repo
+    },
 ]
 
 
@@ -198,7 +203,7 @@ def _git_clone_packages():
         git.clone(
             url=repo["url"],
             dst=os.path.join(_root, "downloads", repo["name"]),
-            branch=repo["branch"],
+            branch=repo.get("branch"),
         )
 
 
