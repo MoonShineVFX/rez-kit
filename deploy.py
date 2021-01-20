@@ -33,6 +33,10 @@ _pkg_repos = [
         "url": "https://github.com/MoonShineVFX/rez-house.git",
         # This is private repo
     },
+    {
+        "name": "production",
+        "url": "https://github.com/MoonShineVFX/rez-production.git",
+    },
 ]
 
 
