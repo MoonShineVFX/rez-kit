@@ -1,6 +1,7 @@
 # rez-kit
 
 Better use Python 3.7
+Rez 2.71+ required
 
 #### Install Rez
 
@@ -23,7 +24,7 @@ rez --version
 #### Install packages
 
 ```shell
-python ./deploy.py ozark
+python ./deploy.py <package-name>
 ```
 
 Essential packages will also be installed: `os`, `arch`.. and `rez`.
