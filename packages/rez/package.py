@@ -16,9 +16,12 @@ def version():
 
 
 variants = [
-    ["platform-*"],
+    ["platform-*", "arch-*", "os-*", "python-2.*"],
+    ["platform-*", "arch-*", "os-*", "python-3.*"],
 ]
 
+# NOTE: This build script is simply copying modules from rez source,
+#       which is not robust. Better install with rez-kit deploy script.
 build_command = "python {root}/rezbuild.py {install}"
 
 

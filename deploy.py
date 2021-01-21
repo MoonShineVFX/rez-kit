@@ -3,10 +3,11 @@ import os
 import subprocess
 from collections import OrderedDict as odict
 from kitz import git, lib
+from install import REZ_SRC
 
 from rez.config import config
 from rez.utils.formatting import PackageRequest
-from rez.package_repository import package_repository_manager
+from rez.package_repository import package_repository_manager as pkg_repos
 from rez.package_maker import PackageMaker
 from rez.resolved_context import ResolvedContext
 from rez.packages import (
@@ -14,7 +15,7 @@ from rez.packages import (
     get_latest_package_from_string as get_latest_pkg_by_str,
 )
 
-
+_state = dict()
 _root = os.path.dirname(os.path.abspath(__file__))
 _dev_dirs = [
     # dir name must be valid Rez package name
@@ -43,6 +44,25 @@ _pkg_repos = [
 _memory = "memory@any"
 
 
+def set_release(value):
+    if value:
+        _state.update({
+            "release": True,
+            "bind_cmd": ["rez-bind", "--release"],
+            "install_cmd": ["rez-release"],
+            "packages_path": config.nonlocal_packages_path[:],
+            "install_path": config.release_packages_path,
+        })
+    else:
+        _state.update({
+            "release": False,
+            "bind_cmd": ["rez-bind"],
+            "install_cmd": ["rez-build", "--install"],
+            "packages_path": config.packages_path[:],
+            "install_path": config.local_packages_path,
+        })
+
+
 def print_developer_packages(requests):
     requests = requests or []
     _before_deploy()
@@ -69,21 +89,22 @@ def print_developer_packages(requests):
                 print(package.qualified_name)
 
 
-def deploy_packages(requests, release=False, yes=False):
-    _bind("os", release)
-    _bind("arch", release)
-    _bind("platform", release)
+def deploy_packages(requests, yes=False):
+    _bind("os")
+    _bind("arch")
+    _bind("platform")
 
     _before_deploy()
 
-    if release:
-        package_paths = config.nonlocal_packages_path + [_memory]
-    else:
-        package_paths = config.packages_path + [_memory]
+    package_paths = _state["packages_path"] + [_memory]
 
     for request in requests:
         print("Processing deploy request: %s .." % request)
-        _deploy_package(request, package_paths, release, yes)
+        deployed = _deploy_package(request, package_paths, yes)
+        if not deployed:
+            break
+    else:
+        return True
 
 
 def _before_deploy():
@@ -91,8 +112,20 @@ def _before_deploy():
     _developer_packages_to_memory()
 
 
-def _deploy_package(request, package_paths=None, release=False, yes=False):
-    implicit_pkgs = list(map(PackageRequest, config.implicit_packages))
+def _clear_repo_cache(path=None):
+    """Clear filesystem repo family cache after pkg bind/install
+
+    Current use case: Clear cache after rez-bind and before iter dev
+    packages into memory. Without this, variants like os-* may not be
+    expanded due to filesystem repo doesn't know 'os' has been bind since
+    the family list is cached in this session.
+
+    """
+    fs_repo = pkg_repos.get_repository(path or _state["install_path"])
+    fs_repo.get_family.cache_clear()
+
+
+def _deploy_package(request, package_paths=None, yes=False):
 
     def in_memory(pkg):
         return pkg.parent.repository.name() == "memory"
@@ -109,6 +142,7 @@ def _deploy_package(request, package_paths=None, release=False, yes=False):
         else:
             name = pkg_to_deploy.qualified_name
             variants = pkg_to_deploy.iter_variants()
+            # TODO: check all variants are installed
 
             if in_memory(pkg_to_deploy):
                 uri = pkg_to_deploy.data.get("_uri", "??")
@@ -117,13 +151,7 @@ def _deploy_package(request, package_paths=None, release=False, yes=False):
                 is_installed = True
 
         for variant in variants:
-            pkg_requests = variant.get_requires(build_requires=True,
-                                                private_build_requires=True)
-
-            context = ResolvedContext(pkg_requests + implicit_pkgs,
-                                      building=True,
-                                      package_paths=package_paths)
-
+            context = _get_build_context(variant, package_paths)
             for package in context.resolved_packages:
                 dep_name = package.qualified_package_name
 
@@ -158,17 +186,45 @@ def _deploy_package(request, package_paths=None, release=False, yes=False):
 
         # Deploy
         for q_name, _uri in dependencies.items():
-            if release:
-                args = ["rez-release"]
-            else:
-                args = ["rez-build", "--install"]
+            if q_name.startswith("rez-"):
+                _clear_repo_cache()
+                _install_rez_as_package(package_paths)
+                continue
 
+            args = _state["install_cmd"]
             subprocess.check_call(args, cwd=os.path.dirname(_uri))
 
     else:
         print("Package %r already been installed." % request)
 
     return True
+
+
+_implicit_pkgs = list(map(PackageRequest, config.implicit_packages))
+
+
+def _get_build_context(variant, package_paths=None):
+    pkg_requests = variant.get_requires(build_requires=True,
+                                        private_build_requires=True)
+    return ResolvedContext(pkg_requests + _implicit_pkgs,
+                           building=True,
+                           package_paths=package_paths)
+
+
+def _install_rez_as_package(package_paths):
+    """Use Rez's install script to deploy rez as package
+    """
+    rez_install = os.path.join(os.path.abspath(REZ_SRC), "install.py")
+    dev_pkg = get_latest_pkg_by_str("rez", paths=[_memory])
+    dst = _state["install_path"]
+
+    for variant in dev_pkg.iter_variants():
+        context = _get_build_context(variant, package_paths)
+        context.execute_shell(
+            command=["python", rez_install, "-v", "-p", dst],
+            block=True,
+            cwd=REZ_SRC,
+        )
 
 
 def _developer_packages_to_memory():
@@ -185,6 +241,8 @@ def _developer_packages_to_memory():
     # If we don't do this, requirements like "os-*" or "python-2.*" may fail
     # the schema validation due to the required package is not yet installed.
     config.override("packages_path", config.packages_path[:] + _dev_dirs)
+    # Ensure unversioned package is allowed, so we can iter dev packages.
+    config.override("allow_unversioned_packages", True)
 
     for family in iter_package_families(paths=_dev_dirs):
         name = family.name  # package dir name
@@ -205,10 +263,11 @@ def _developer_packages_to_memory():
         packages[name] = versions
 
     # save collected dev packages in memory repository
-    memory_repo = package_repository_manager.get_repository(_memory)
+    memory_repo = pkg_repos.get_repository(_memory)
     memory_repo.data = packages
 
     config.remove_override("packages_path")
+    config.remove_override("allow_unversioned_packages")
 
 
 def _git_clone_packages():
@@ -221,17 +280,11 @@ def _git_clone_packages():
         )
 
 
-def _bind(name, release=False):
-    if release:
-        paths = config.nonlocal_packages_path
-        pkg = get_latest_pkg_by_str(name, paths=paths)
-        if pkg is None:
-            subprocess.check_call(["rez-bind", "--release", name])
-    else:
-        paths = config.packages_path
-        pkg = get_latest_pkg_by_str(name, paths=paths)
-        if pkg is None:
-            subprocess.check_call(["rez-bind", name])
+def _bind(name):
+    pkg = get_latest_pkg_by_str(name, paths=_state["packages_path"])
+    if pkg is None:
+        subprocess.check_call(_state["bind_cmd"] + [name])
+        _clear_repo_cache()
 
 
 if __name__ == "__main__":
@@ -257,7 +310,8 @@ if __name__ == "__main__":
         sys.exit(0)
 
     if opt.packages:
-        if deploy_packages(opt.packages, opt.release, opt.yes):
+        set_release(opt.release)
+        if deploy_packages(opt.packages, opt.yes):
             print("=" * 30)
             print("SUCCESS!\n")
 
