@@ -154,6 +154,7 @@ def _deploy_package(request, package_paths=None, release=False, yes=False):
         proceed = yes or lib.confirm("Do you want to continue ? [Y/n]\n")
         if not proceed:
             print("Cancelled")
+            return
 
         # Deploy
         for q_name, _uri in dependencies.items():
@@ -167,6 +168,8 @@ def _deploy_package(request, package_paths=None, release=False, yes=False):
     else:
         print("Package %r already been installed." % request)
 
+    return True
+
 
 def _developer_packages_to_memory():
     """Collect and save developer packages into memory repository
@@ -177,6 +180,11 @@ def _developer_packages_to_memory():
 
     """
     packages = dict()
+
+    # Append _dev_dirs into packages_path so the requires can be expanded.
+    # If we don't do this, requirements like "os-*" or "python-2.*" may fail
+    # the schema validation due to the required package is not yet installed.
+    config.override("packages_path", config.packages_path[:] + _dev_dirs)
 
     for family in iter_package_families(paths=_dev_dirs):
         name = family.name  # package dir name
@@ -191,7 +199,7 @@ def _developer_packages_to_memory():
             data = package.data.copy()
 
             data["_uri"] = _pkg.uri
-            version = data.get("version", "")
+            version = data.get("version", "unversioned")
             versions[version] = data
 
         packages[name] = versions
@@ -199,6 +207,8 @@ def _developer_packages_to_memory():
     # save collected dev packages in memory repository
     memory_repo = package_repository_manager.get_repository(_memory)
     memory_repo.data = packages
+
+    config.remove_override("packages_path")
 
 
 def _git_clone_packages():
@@ -247,9 +257,9 @@ if __name__ == "__main__":
         sys.exit(0)
 
     if opt.packages:
-        deploy_packages(opt.packages, opt.release, opt.yes)
-        print("=" * 30)
-        print("SUCCESS!\n")
+        if deploy_packages(opt.packages, opt.release, opt.yes):
+            print("=" * 30)
+            print("SUCCESS!\n")
 
     else:
         print("Please name at least one package to deploy. Use --list to "
