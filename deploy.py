@@ -5,15 +5,6 @@ from collections import OrderedDict as odict
 from kitz import git, lib
 from install import REZ_SRC
 
-from rez.config import config
-from rez.utils.formatting import PackageRequest
-from rez.package_repository import package_repository_manager as pkg_repos
-from rez.package_maker import PackageMaker
-from rez.resolved_context import ResolvedContext
-from rez.packages import (
-    iter_package_families,
-    get_latest_package_from_string as get_latest_pkg_by_str,
-)
 
 _state = dict()
 _root = os.path.dirname(os.path.abspath(__file__))
@@ -45,6 +36,8 @@ _memory = "memory@any"
 
 
 def set_release(value):
+    from rez.config import config
+
     if value:
         _state.update({
             "release": True,
@@ -64,12 +57,17 @@ def set_release(value):
 
 
 def print_developer_packages(requests):
+    from rez.packages import (
+        iter_package_families,
+        get_latest_package_from_string,
+    )
+
     requests = requests or []
     _before_deploy()
 
     names = list()
     for request in requests:
-        pkg = get_latest_pkg_by_str(request, paths=[_memory])
+        pkg = get_latest_package_from_string(request, paths=[_memory])
         if pkg is None:
             print("Package not found in this repository: %s" % request)
             continue
@@ -121,11 +119,15 @@ def _clear_repo_cache(path=None):
     the family list is cached in this session.
 
     """
-    fs_repo = pkg_repos.get_repository(path or _state["install_path"])
+    from rez.package_repository import package_repository_manager
+
+    path = path or _state["install_path"]
+    fs_repo = package_repository_manager.get_repository(path)
     fs_repo.get_family.cache_clear()
 
 
 def _deploy_package(request, package_paths=None, yes=False):
+    from rez.packages import get_latest_package_from_string
 
     def in_memory(pkg):
         return pkg.parent.repository.name() == "memory"
@@ -135,7 +137,8 @@ def _deploy_package(request, package_paths=None, yes=False):
         is_installed = False
         to_install = odict()
 
-        pkg_to_deploy = get_latest_pkg_by_str(name, paths=package_paths)
+        pkg_to_deploy = get_latest_package_from_string(name,
+                                                       paths=package_paths)
         if pkg_to_deploy is None:
             uri = None
             variants = []  # dev package might not exists
@@ -200,13 +203,15 @@ def _deploy_package(request, package_paths=None, yes=False):
     return True
 
 
-_implicit_pkgs = list(map(PackageRequest, config.implicit_packages))
-
-
 def _get_build_context(variant, package_paths=None):
+    from rez.config import config
+    from rez.utils.formatting import PackageRequest
+    from rez.resolved_context import ResolvedContext
+
+    implicit_pkgs = list(map(PackageRequest, config.implicit_packages))
     pkg_requests = variant.get_requires(build_requires=True,
                                         private_build_requires=True)
-    return ResolvedContext(pkg_requests + _implicit_pkgs,
+    return ResolvedContext(pkg_requests + implicit_pkgs,
                            building=True,
                            package_paths=package_paths)
 
@@ -214,8 +219,10 @@ def _get_build_context(variant, package_paths=None):
 def _install_rez_as_package(package_paths):
     """Use Rez's install script to deploy rez as package
     """
+    from rez.packages import get_latest_package_from_string
+
     rez_install = os.path.join(os.path.abspath(REZ_SRC), "install.py")
-    dev_pkg = get_latest_pkg_by_str("rez", paths=[_memory])
+    dev_pkg = get_latest_package_from_string("rez", paths=[_memory])
     dst = _state["install_path"]
 
     for variant in dev_pkg.iter_variants():
@@ -235,6 +242,12 @@ def _developer_packages_to_memory():
     is resolved from memory, and deployed it.
 
     """
+    from rez.config import config
+    from rez.package_maker import PackageMaker
+    from rez.packages import iter_package_families
+    from rez.developer_package import DeveloperPackage
+    from rez.package_repository import package_repository_manager
+
     packages = dict()
 
     # Append _dev_dirs into packages_path so the requires can be expanded.
@@ -252,9 +265,16 @@ def _developer_packages_to_memory():
             data = _pkg.data.copy()
             name = data["name"]  # real name in package.py
 
-            maker = PackageMaker(name, data=data)  # expand variant requires
+            maker = PackageMaker(name,
+                                 data=data,
+                                 package_cls=DeveloperPackage)
             package = maker.get_package()
             data = package.data.copy()
+
+            # preprocessing
+            result = package._get_preprocessed(data)
+            if result:
+                package, data = result
 
             data["_uri"] = _pkg.uri
             version = data.get("version", "unversioned")
@@ -263,7 +283,7 @@ def _developer_packages_to_memory():
         packages[name] = versions
 
     # save collected dev packages in memory repository
-    memory_repo = pkg_repos.get_repository(_memory)
+    memory_repo = package_repository_manager.get_repository(_memory)
     memory_repo.data = packages
 
     config.remove_override("packages_path")
@@ -281,7 +301,9 @@ def _git_clone_packages():
 
 
 def _bind(name):
-    pkg = get_latest_pkg_by_str(name, paths=_state["packages_path"])
+    from rez.packages import get_latest_package_from_string
+
+    pkg = get_latest_package_from_string(name, paths=_state["packages_path"])
     if pkg is None:
         subprocess.check_call(_state["bind_cmd"] + [name])
         _clear_repo_cache()
@@ -304,6 +326,11 @@ if __name__ == "__main__":
                         "`packages` given, versions will be listed.")
 
     opt = parser.parse_args()
+
+    os.environ["REZ_CONFIG_FILE"] = os.pathsep.join(
+        [os.path.join(_root, "rezconfig.py")] +
+        os.getenv("REZ_CONFIG_FILE", "").split(os.pathsep)
+    )
 
     if opt.list:
         print_developer_packages(opt.packages)
