@@ -323,6 +323,7 @@ def _bind(name):
 
 if __name__ == "__main__":
     # TODO: ensure vcs plugin "kit" is loaded on package release
+    # TODO: This deploy script requires to be in rez venv
     import sys
     import argparse
 
