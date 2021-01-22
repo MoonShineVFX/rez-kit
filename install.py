@@ -10,6 +10,13 @@ from kitz import git, lib
 REZ_URL = "https://github.com/MoonShineVFX/rez.git"
 REZ_SRC = "build/rezsrc"
 
+venv_pip_packages = [
+    "pyside2",
+    "qt.py",
+    "qt5.py",
+    "pymongo",
+]
+
 
 def install_rez(dst):
     git.clone(REZ_URL, REZ_SRC)
@@ -41,12 +48,7 @@ def install_pip_packages(dst):
     py_executable = os.path.join(get_virtualenv_bin_dir(dst),
                                  os.path.basename(sys.executable))
     subprocess.check_call([
-        py_executable, "-m", "pip", "install",
-        "pyside2",
-        "qt.py",
-        "qt5.py",
-        "pymongo",
-    ])
+        py_executable, "-m", "pip", "install"] + venv_pip_packages)
 
 
 def get_virtualenv_bin_dir(dest_dir):
