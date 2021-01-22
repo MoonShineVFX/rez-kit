@@ -5,11 +5,21 @@ ModifyList = globals()["ModifyList"]
 
 # Rez's default package path excluded
 local_packages_path = "~/rez/packages/install"
-release_packages_path = os.getenv("SHARED_PACKAGES_PATH",
-                                  "~/rez/packages/release")
+release_packages_path = os.getenv(
+    "_REZ_SITE_WIDE_PACKAGES_PATH", "~/rez/packages/release")
+
 packages_path = [
-    local_packages_path,
-    release_packages_path,
+    p for p in (
+
+        local_packages_path,
+        # User specific beta release path
+        os.getenv("_REZ_BETA_USER_PACKAGES_PATH"),
+        # Dept. specific beta release path
+        os.getenv("_REZ_BETA_DEPT_PACKAGES_PATH"),
+
+        release_packages_path,
+    )
+    if p is not None
 ]
 
 
