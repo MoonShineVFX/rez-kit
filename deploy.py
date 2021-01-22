@@ -1,5 +1,6 @@
 
 import os
+import logging
 import subprocess
 from collections import OrderedDict as odict
 from kitz import git, lib
@@ -57,10 +58,13 @@ def set_release(value):
 
 
 def print_developer_packages(requests):
+    from rez.utils.logging_ import logger
     from rez.packages import (
         iter_package_families,
         get_latest_package_from_string,
     )
+
+    logger.setLevel(logging.WARNING)
 
     requests = requests or []
     _before_deploy()
@@ -88,6 +92,10 @@ def print_developer_packages(requests):
 
 
 def deploy_packages(requests, yes=False):
+    from rez.utils.logging_ import logger
+
+    logger.setLevel(logging.WARNING)
+
     _bind("os")
     _bind("arch")
     _bind("platform")
@@ -225,7 +233,11 @@ def _install_rez_as_package(package_paths):
     dev_pkg = get_latest_package_from_string("rez", paths=[_memory])
     dst = _state["install_path"]
 
+    print("Installing Rez as package..")
+
     for variant in dev_pkg.iter_variants():
+        print("Variant: ", variant)
+
         context = _get_build_context(variant, package_paths)
         context.execute_shell(
             command=["python", rez_install, "-v", "-p", dst],
