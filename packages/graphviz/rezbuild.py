@@ -23,10 +23,11 @@ def build(source_path, build_path, install_path, targets=None):
     if os.path.isdir(dst):
         shutil.rmtree(dst)
 
-    python_version = os.environ["REZ_BUILD_PROJECT_VERSION"]
+    build_version = os.environ["REZ_BUILD_PROJECT_VERSION"]
+    payload_version = build_version.rsplit("-", 1)[0]
 
     # Download the source
-    url = "%s/%s" % (url_prefix, payload.format(ver=python_version))
+    url = "%s/%s" % (url_prefix, payload.format(ver=payload_version))
     archive = lib.download(url, os.path.basename(url))
 
     # Unzip the source
