@@ -24,10 +24,10 @@ def build(source_path, build_path, install_path, targets=None):
         shutil.rmtree(dst)
 
     build_version = os.environ["REZ_BUILD_PROJECT_VERSION"]
-    python_version = build_version.rsplit("-", 1)[0]
+    payload_version = build_version.rsplit("-", 1)[0]
 
     # Download the source
-    url = "%s/%s" % (url_prefix, payload.format(ver=python_version))
+    url = "%s/%s" % (url_prefix, payload.format(ver=payload_version))
     archive = lib.download(url, os.path.basename(url))
 
     # Unzip the source
