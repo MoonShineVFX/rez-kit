@@ -13,20 +13,21 @@ def clone(url, dst, branch=None, single_branch=True):
     # https://stackoverflow.com/a/4568323/14054728
 
     if os.path.isdir(dst + "/.git"):
-        print("git dir exists, skip clone.")
-        return
+        # TODO: checkout latest
+        pass
 
-    args = ["git", "clone"]
+    else:
+        args = ["git", "clone"]
 
-    if branch:
-        args.extend(["-b", branch])
+        if branch:
+            args.extend(["-b", branch])
 
-    if single_branch:
-        args.append("--single-branch")
+        if single_branch:
+            args.append("--single-branch")
 
-    args.extend([url, dst])
+        args.extend([url, dst])
 
-    subprocess.check_output(args)
+        subprocess.check_output(args)
 
 
 def get_branch(repository):

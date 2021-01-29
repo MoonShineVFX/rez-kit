@@ -1,36 +1,27 @@
 
 import os
+import json
 import logging
 import subprocess
 from collections import OrderedDict as odict
-from kitz import git, lib
+from kitz import git, lib, deliver
 from install import REZ_SRC
 
 
 _state = dict()
 _root = os.path.dirname(os.path.abspath(__file__))
+_ext = os.path.join(_root, "packages", "external.json")
 _dev_dirs = [
     # dir name must be valid Rez package name
     os.path.join(_root, "packages"),
     os.path.join(_root, "downloads"),
 ]
 
-_pkg_repos = [
-    {
-        "name": "pipz",
-        "url": "https://github.com/davidlatwe/rez-pipz.git",
-        "branch": "dev",
-    },
-    {
-        "name": "house",
-        "url": "https://github.com/MoonShineVFX/rez-house.git",
-        # This is private repo
-    },
-    {
-        "name": "production",
-        "url": "https://github.com/MoonShineVFX/rez-production.git",
-    },
-]
+if os.path.isfile(_ext):
+    with open(_ext, "r") as ext_f:
+        _pkg_repos = json.load(ext_f)
+else:
+    _pkg_repos = []
 
 
 _memory = "memory@any"
@@ -276,6 +267,13 @@ def _developer_packages_to_memory():
         for _pkg in family.iter_packages():
             data = _pkg.data.copy()
             name = data["name"]  # real name in package.py
+
+            if data.get("github_repo"):
+                repo = data["github_repo"]
+                # get latest release, and mark unavailable if None.
+                result = next(deliver.get_releases(repo, latest=True))
+                if result:
+                    os.environ["GITHUB_REZ_PKG_PAYLOAD_VER"] = result[0]
 
             maker = PackageMaker(name,
                                  data=data,
