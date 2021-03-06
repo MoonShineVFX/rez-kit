@@ -1,7 +1,7 @@
 # rez-kit
 
 Better use Python 3.7
-Rez 2.71+ required
+Rez 2.75+ required
 
 #### Install Rez
 
@@ -23,8 +23,10 @@ rez --version
 
 #### Install packages
 
-```shell
-python ./deploy.py <package-name>
-```
+Use [`rez-deliver`](https://github.com/davidlatwe/rez-deliver)
 
-Essential packages will also be installed: `os`, `arch`.. and `rez`.
+Additional packages
+
+* https://github.com/davidlatwe/rez-pipz
+* https://github.com/MoonShineVFX/rez-house
+* https://github.com/MoonShineVFX/rez-production
