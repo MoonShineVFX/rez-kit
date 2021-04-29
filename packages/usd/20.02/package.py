@@ -17,7 +17,6 @@ requires = [
 
 variants = [
     ["platform-*", "python-2.7"],
-    ["platform-*", "python-2.7"],
 ]
 
 

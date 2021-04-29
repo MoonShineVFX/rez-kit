@@ -27,6 +27,7 @@ build_command = "python {root}/rezbuild.py {install}"
 
 def commands():
     env = globals()["env"]
+    alias = globals()["alias"]
     system = globals()["system"]
 
     if system.platform == "windows":
@@ -35,6 +36,11 @@ def commands():
     else:
         # untested
         env.PATH.prepend("{root}/payload/bin")
+
+    # in case the entry points are still link to the original packaging
+    # location. Or, pip install --upgrade to fix it.
+    alias("pip", "python -m pip")
+    alias("easy_install", "python -m easy_install")
 
 
 uuid = "repository.python"
