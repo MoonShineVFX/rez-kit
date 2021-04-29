@@ -4,40 +4,35 @@ name = "avalon"
 
 version = "0.0.0-m0"
 
-github_repo = "MoonShineVFX/avalon-core"  # for rez-deliver
+git_url = "https://github.com/MoonShineVFX/avalon-core.git"
 
 
-def preprocess(this, data):
+@early()
+def version():
     import os
 
-    # These two environment variables should be set by our
-    # 'github-based Rez package releasing tool' -> rez-deliver
-    #
-    payload_ver = "GITHUB_REZ_PKG_PAYLOAD_VER"
-    release_path = "REZ_RELEASE_PACKAGES_PATH"
+    package_ver = "m1"
+    payload_ver = os.getenv("REZ_DELIVER_PKG_PAYLOAD_VER")
 
-    if os.getenv(payload_ver):
-        data["version"] = "%s-%s" % (
+    if payload_ver:
+        return "%s-%s" % (
             # payload version
-            os.environ[payload_ver],
+            payload_ver,
             # package def version
-            "m1"
+            package_ver
         )
 
-    if os.getenv(release_path):
-        try:
-            _ = data["config"]["release_packages_path"]
-        except KeyError:
-            data["config"] = data["config"] or {}
-            data["config"]["release_packages_path"] = os.environ[release_path]
-        else:
-            pass  # already explicitly specified by package
+    else:
+        return "0.0.0-" + package_ver
 
 
 def pre_build_commands():
     env = globals()["env"]
-    this = globals()["this"]
-    env.GITHUB_REPO = this.github_repo
+    expandvars = globals()["expandvars"]
+    optionvars = globals()["optionvars"]
+
+    feature = expandvars("{this.name}.dev")
+    env.REZ_BUILD_PKG_PAYLOAD_ROOT = optionvars(feature, default="")
 
 
 requires = [

@@ -16,8 +16,7 @@ def version():
 
 
 variants = [
-    ["platform-*", "arch-*", "os-*", "python-2.*"],
-    ["platform-*", "arch-*", "os-*", "python-3.*"],
+    ["platform-*", "arch-*", "os-*", "python-*.*"],
 ]
 
 # NOTE: This build script is simply copying modules from rez source,

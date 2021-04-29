@@ -12,15 +12,19 @@ packages_path = [
     p for p in (
 
         local_packages_path,
-        # User specific beta release path
+        # Host specific beta path
+        os.getenv("_REZ_BETA_HOST_PACKAGES_PATH"),
+        # User specific beta path
         os.getenv("_REZ_BETA_USER_PACKAGES_PATH"),
-        # Dept. specific beta release path
+        # Dept. specific beta path
         os.getenv("_REZ_BETA_DEPT_PACKAGES_PATH"),
 
         release_packages_path,
     )
     if p is not None
 ]
+
+cache_packages_path = "~/rez/pkg-cache"
 
 
 allow_unversioned_packages = False
@@ -57,7 +61,6 @@ platform_map = {
     },
 }
 
-plugin_path = ModifyList(append=[
-    # The path *above* rezplugins/ directory
-    os.path.join(os.path.dirname(__file__), "kitz")
-])
+# site/machine/user specific data for package, can be used with
+# ephemeral packages.
+optionvars = {}
