@@ -44,7 +44,7 @@ def build(source_path, build_path, install_path, targets=None):
 
     # Additional (see getblessing/rez-avalon)
     dst_root = os.path.dirname(dst)
-    for dir_name in ["apps", "bin", "python", "config", "template"]:
+    for dir_name in ["bin", "allzpark"]:
         dst_dir = os.path.join(dst_root, dir_name)
         lib.copy_dir(os.path.join(source_path, dir_name), dst_dir)
 
