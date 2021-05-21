@@ -33,7 +33,7 @@ def commands():
     env = globals()["env"]
     system = globals()["system"]
 
-    env.MAYA_VERSION = str(env.REZ_MAYA_VERSION)
+    env.MAYA_VERSION = str(env.REZ_MAYA_VERSION).rsplit("-m", 1)[0]
 
     if system.platform == "windows":
         env.MAYA_LOCATION = "C:/Program Files/Autodesk/Maya{env.MAYA_VERSION}"
