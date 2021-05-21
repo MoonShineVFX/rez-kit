@@ -34,6 +34,7 @@ tools = [
 
 requires = [
     "pyblish",
+    "PyQt5",
     "Qt.py",
 ]
 
