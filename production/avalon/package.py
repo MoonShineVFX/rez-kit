@@ -97,8 +97,6 @@ def commands():
     env.PATH.prepend("{root}/bin")
     # Avalon payload
     env.PYTHONPATH.prepend("{root}/payload")
-    # Allzpark
-    env.ALLZPARK_CONFIG_FILE = "{root}/config/allzparkconfig.py"
 
     # MongoDB (pkg 'house' required)
     env.AVALON_MONGO = "{env.HOUSE_PIPELINE_MONGO}"
