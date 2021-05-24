@@ -6,7 +6,7 @@ name = "Qt5.py"
 
 description = "Minimal Python 2 & 3 shim around PySide2 and PyQt5."
 
-version = "0.2.0.b2-m1"
+version = "0.2.0.b2-m2"
 
 requires = []
 
@@ -14,7 +14,6 @@ requires = []
 @early()
 def variants():
     from rez import packages
-    building = globals()["building"]
 
     bindings = [
         "PyQt5",
@@ -26,12 +25,7 @@ def variants():
     ]
 
     if not variants_:
-        if building:
-            raise Exception("No Qt5 binding package found.")
-        else:
-            variants_ += [
-                ["PySide2"],
-            ]
+        raise Exception("No Qt5 binding package found.")
 
     return variants_
 
