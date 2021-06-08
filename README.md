@@ -23,5 +23,3 @@ Use [`rez-deliver`](https://github.com/davidlatwe/rez-deliver)
 Additional packages
 
 * https://github.com/davidlatwe/rez-pipz
-* https://github.com/MoonShineVFX/rez-house
-* https://github.com/MoonShineVFX/rez-production
