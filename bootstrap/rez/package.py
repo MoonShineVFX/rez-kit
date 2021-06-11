@@ -12,7 +12,11 @@ def version():
 
     os.environ["REZ_SOURCE_PATH"] = rez.__path__[0]
 
-    return rez.__version__
+    # Our fork of rez has '+' sign in version string to indicate
+    # local change.
+    # Which align to PEP 440 version spec but not to rez package's
+    # version syntax. So we have to normalize it.
+    return rez.__version__.replace("+", "-")
 
 
 variants = [
