@@ -30,7 +30,7 @@ def commands():
     system = globals()["system"]
 
     # strip out Rez package version
-    hou_version = str(env.REZ_HOUDINI_VERSION).rsplit(".", 1)[0]
+    hou_version = str(env.REZ_HOUDINI_VERSION).rsplit("-", 1)[0]
     env.HOUDINI_VERSION = hou_version
 
     if system.platform == "windows":
