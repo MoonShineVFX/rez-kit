@@ -1,7 +1,7 @@
 
 name = "maya"
 
-version = "2018-m1"
+version = "2018-m2"
 
 description = "Autodesk Maya 2018"
 
@@ -46,9 +46,6 @@ def commands():
         env.DYLD_LIBRARY_PATH = "{env.MAYA_LOCATION}/MacOS"
 
     env.PATH.append("{env.MAYA_LOCATION}/bin")
-
-    # clean Maya.env
-    env.PYTHONPATH.append("{root}/resources")
 
     # Override some Maya default settings (optimization)
     # todo: These might need to be moved out to be left to company specific choices
