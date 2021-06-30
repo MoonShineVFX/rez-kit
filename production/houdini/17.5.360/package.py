@@ -1,7 +1,7 @@
 
 name = "houdini"
 
-version = "17.5.360-m1"
+version = "17.5.360-m2"
 
 description = "SideFX Houdini"
 
