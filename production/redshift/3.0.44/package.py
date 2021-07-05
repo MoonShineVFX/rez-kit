@@ -1,13 +1,18 @@
 
 name = "redshift"
 
-version = "3.0.26-m1"
+version = "3.0.44-m1"
 
 _data = {
     # Allzpark
     "label": "Redshift",
     "icon": "{root}/logo.svg"
 }
+
+requires = [
+    "~houdini-17.0.506+<=18.5.532",
+    "~maya-2014+<=2020",
+]
 
 variants = [
     ["platform-*"],
