@@ -1,7 +1,7 @@
 
 name = "nuke"
 
-version = "11.3v4-m1"
+version = "11.3v4-m2"
 
 description = "The Foundry Nuke 11.3v4"
 
@@ -35,7 +35,7 @@ def commands():
     alias = globals()["alias"]
     system = globals()["system"]
 
-    env.NUKE_VERSION = str(env.REZ_NUKE_VERSION)
+    env.NUKE_VERSION = str(env.REZ_NUKE_VERSION).rsplit("-m", 1)[0]
 
     if system.platform == "windows":
         env.NUKE_LOCATION = "C:/Program Files/Nuke{env.NUKE_VERSION}"

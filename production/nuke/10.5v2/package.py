@@ -1,9 +1,9 @@
 
 name = "nuke"
 
-version = "11.3v5-m2"
+version = "10.5v2-m1"
 
-description = "The Foundry Nuke 11.3v5"
+description = "The Foundry Nuke 10.5v2"
 
 _data = {
     # Allzpark
@@ -40,8 +40,8 @@ def commands():
     if system.platform == "windows":
         env.NUKE_LOCATION = "C:/Program Files/Nuke{env.NUKE_VERSION}"
 
-        alias("nuke", "Nuke11.3")
-        alias("nukex", "Nuke11.3 -x")
+        alias("nuke", "Nuke10.5")
+        alias("nukex", "Nuke10.5 -x")
 
     elif system.platform == "linux":
         pass
