@@ -26,6 +26,11 @@ def commands():
     env = globals()["env"]
     resolve = globals()["resolve"]
 
+    # Important:
+    #   The foundation of all other redshift env vars
+    #
+    env.REDSHIFT_COREDATAPATH = "{root}"
+
     if "maya" in resolve:
         env.MAYA_MODULE_PATH.prepend("{root}")
 
