@@ -1,7 +1,7 @@
 
 name = "houdini"
 
-version = "18.0.416-m2"
+version = "18.0.416-m3"
 
 description = "SideFX Houdini"
 
@@ -37,10 +37,6 @@ def commands():
         env.HOUDINI_LOCATION = "C:/Program Files/Side Effects Software/"\
                                "Houdini {env.HOUDINI_VERSION}"
 
-        env.HOUDINI_SCRIPT_PATH.append("{env.HOUDINI_LOCATION}/houdini/scripts")
-        env.HOUDINI_OTLSCAN_PATH.append("@/otls")
-        env.HOUDINI_MENU_PATH.append("@/")
-
         # When start dir is at root drive e.g. "F:", OTLs may fail to load
         # on startup with errors like:
         #   "ImportError: No module named sidefx_stroke"
@@ -60,3 +56,8 @@ def commands():
 
     # Append "default" path for the given variable
     env.HOUDINI_PATH.append("&")
+    env.HOUDINI_SCRIPT_PATH.append("&")
+
+    # Expands to sub-dir of HOUDINI_PATH
+    env.HOUDINI_MENU_PATH.append("@/")
+    env.HOUDINI_OTLSCAN_PATH.append("@/otls")
