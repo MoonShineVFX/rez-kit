@@ -1,7 +1,7 @@
 
 name = "atomsvfx"
 
-version = "4.0.0-m1"
+version = "4.1.1-m1"
 
 _data = {
     # Allzpark
@@ -10,17 +10,19 @@ _data = {
 }
 
 requires = [
-    "~maya-2017+<=2020",
-    "~arnold_core-5.1.1.1+<=6.2.0.1",
-    "~redshift-3.0.36|3.0.41",
+    "~maya-2018+<=2022",
+    "~arnold_core-5.1.1.1+<=6.2.1.1",
+    "~redshift-3.0.36|3.0.44|3.0.45|3.0.49",
     "atomsbase-1",
 ]
 
 variants = [
     ["platform-*", "maya"],
-    ["platform-*", "houdini-18.0.597"],
+    ["platform-*", "houdini-18.5.408"],
     ["platform-*", "houdini-18.5.499"],
     ["platform-*", "houdini-18.5.532"],
+    ["platform-*", "houdini-18.5.563"],
+    ["platform-*", "houdini-18.5.596"],
 ]
 
 private_build_requires = ["rezutil-1"]

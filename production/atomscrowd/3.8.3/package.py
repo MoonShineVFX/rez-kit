@@ -10,9 +10,10 @@ _data = {
 }
 
 requires = [
-    "~arnold_core-5.2.2.1|5.4.0.0|6.0.4.0",
-    "~redshift-2.6.41|2.6.51",
-    "atomscrowd_base-1",
+    "~maya-2017+<=2020",
+    "~arnold_core-5.1.1.1+<=6.1.0.0",
+    "~redshift-2.6.19|2.6.41|2.6.51",
+    "atomsbase-1",
 ]
 
 variants = [
