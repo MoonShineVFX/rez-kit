@@ -1,7 +1,7 @@
 
 name = "redshift"
 
-version = "3.0.44-m1"
+version = "3.0.44-m2"
 
 _data = {
     # Allzpark
@@ -10,8 +10,11 @@ _data = {
 }
 
 requires = [
-    "~houdini-17.0.506+<=18.5.532",
     "~maya-2014+<=2020",
+    "~houdini-"
+    "17.0.506|17.5.460|"
+    "18.0.597|"
+    "18.5.462|18.5.499|18.5.532",
 ]
 
 variants = [
