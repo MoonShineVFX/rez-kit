@@ -1,11 +1,11 @@
 
-name = "atomscrowd"
+name = "atomsvfx"
 
-version = "3.6.0-m1"
+version = "4.0.0-m1"
 
 _data = {
     # Allzpark
-    "label": "AtomsCrowd",
+    "label": "AtomsVFX",
     "icon": "{root}/logo.png"
 }
 
@@ -17,8 +17,11 @@ requires = [
 
 variants = [
     ["platform-*", "maya"],
-    ["platform-*", "houdini-17.5.460"],
-    # ["platform-*", "houdini-18.0.566"],
+    # ["platform-*", "houdini-18.5.408"],
+    # ["platform-*", "houdini-18.5.499"],
+    ["platform-*", "houdini-18.5.532"],
+    # ["platform-*", "houdini-18.5.563"],
+    # ["platform-*", "houdini-18.5.596"],
 ]
 
 private_build_requires = ["rezutil-1"]
