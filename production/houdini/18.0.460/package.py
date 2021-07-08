@@ -13,7 +13,7 @@ _data = {
 
 requires = [
     "!PySide2",
-    "hou_base-1",
+    "houbase-1",
 ]
 
 tools = [

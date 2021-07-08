@@ -1,5 +1,5 @@
 
-name = "hou_base"
+name = "houbase"
 
 version = "1.0-m1"
 
