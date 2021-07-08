@@ -1,7 +1,7 @@
 
 name = "houdini"
 
-version = "18.5.532-m3"
+version = "18.5.532-m4"
 
 description = "SideFX Houdini"
 
@@ -14,6 +14,7 @@ _data = {
 
 requires = [
     "!PySide2",
+    "hou_base-1",
 ]
 
 tools = [
@@ -23,42 +24,3 @@ tools = [
 
 private_build_requires = ["rezutil-1"]
 build_command = "python -m rezutil build {root}"
-
-
-def commands():
-    env = globals()["env"]
-    alias = globals()["alias"]
-    system = globals()["system"]
-
-    # strip out Rez package version
-    hou_version = str(env.REZ_HOUDINI_VERSION).rsplit("-", 1)[0]
-    env.HOUDINI_VERSION = hou_version
-
-    if system.platform == "windows":
-        env.HOUDINI_LOCATION = "C:/Program Files/Side Effects Software/"\
-                               "Houdini {env.HOUDINI_VERSION}"
-
-        # When start dir is at root drive e.g. "F:", OTLs may fail to load
-        # on startup with errors like:
-        #   "ImportError: No module named sidefx_stroke"
-        alias("houdinifx", "start /d %USERPROFILE% houdinifx")
-
-    elif system.platform == "linux":
-        pass
-
-    elif system.platform == "osx":
-        pass
-
-    env.PATH.append("{env.HOUDINI_LOCATION}/bin")
-    env.PDG_USE_PDGNET = "1"
-
-    # Disable local .env file
-    env.HOUDINI_NO_ENV_FILE = "1"
-
-    # Append "default" path for the given variable
-    env.HOUDINI_PATH.append("&")
-    env.HOUDINI_SCRIPT_PATH.append("&")
-
-    # Expands to sub-dir of HOUDINI_PATH
-    env.HOUDINI_MENU_PATH.append("@/")
-    env.HOUDINI_OTLSCAN_PATH.append("@/otls")
