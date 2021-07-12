@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m1"
+version = "1.0-m2"
 
 description = "SideFX Houdini generic environment setup"
 
@@ -16,15 +16,24 @@ def pre_commands():
     alias = globals()["alias"]
     system = globals()["system"]
     resolve = globals()["resolve"]
+    building = globals()["building"]
 
-    if "houdini" not in resolve:
-        stop("Package 'houdini' is not in resolves. "
+    def env_version_split(env_var):  # no pkg ver
+        return [int(t) for t in str(env_var).rsplit("-")[0].split(".")]
+
+    def is_dependent_in_context(dep_name):
+        return ((building and env.REZ_BUILD_PROJECT_NAME == dep_name)
+                or (not building and dep_name in resolve))
+
+    if not is_dependent_in_context("houdini"):
+        stop("Package 'houdini' is not in context. "
              "Houdini executable path cannot be composed.")
 
-    hou_version_info = [
-        int(t) for t in
-        resolve["houdini"].version.as_tuple()[:3]  # no pkg ver
-    ]
+    if building:  # is building 'houdini'
+        hou_version_info = env_version_split(env.REZ_BUILD_PROJECT_VERSION)
+    else:
+        hou_version_info = env_version_split(env.REZ_HOUDINI_VERSION)
+
     hou_version_str = "{}.{}.{}".format(*hou_version_info)
 
     if system.platform == "windows":
