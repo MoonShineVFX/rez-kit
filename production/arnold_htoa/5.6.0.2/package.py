@@ -1,7 +1,7 @@
 
 name = "arnold_htoa"
 
-version = "5.6.0.2-m1"
+version = "5.6.0.2-m2"
 
 _data = {
     # Allzpark
@@ -16,8 +16,11 @@ requires = [
 ]
 
 variants = [
+    ["platform-*", "houdini-17.5.460"],
     ["platform-*", "houdini-18.0.597"],
     ["platform-*", "houdini-18.5.462"],
+    ["platform-*", "houdini-18.5.499"],
+    ["platform-*", "houdini-18.5.532"],
 ]
 
 tools = [
