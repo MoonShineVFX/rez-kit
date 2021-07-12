@@ -32,14 +32,3 @@ tools = [
 
 private_build_requires = ["rezutil-1"]
 build_command = "python -m rezutil build {root} --use-zip"
-
-
-def commands():
-    env = globals()["env"]
-
-    env.PATH.prepend("{root}/bin")
-    env.MAYA_SCRIPT_PATH.prepend("{root}/scripts/mtoa/mel")
-    env.MAYA_CUSTOM_TEMPLATE_PATH.prepend("{root}/scripts/mtoa/ui/templates")
-    env.MAYA_RENDER_DESC_PATH.prepend("{root}")
-    env.ARNOLD_PLUGIN_PATH.prepend("{root}/shaders")
-    env.MTOA_STARTUP_LOG_VERBOSITY = "1"
