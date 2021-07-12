@@ -20,7 +20,6 @@ def commands():
 
     env = globals()["env"]
     stop = globals()["stop"]
-    request = globals()["request"]
     resolve = globals()["resolve"]
 
     if "arnold_mtoa" in resolve:
@@ -48,9 +47,17 @@ def commands():
         if os.path.isdir(os.path.join(htoa_root, "python3.7libs")):
             env.HTOA_PY3_BUILD = "1"
 
-            if "houdini" in request and "HOUDINI_PY3_BUILD" not in env:
-                stop("Python 3 built HtoA cannot work with Python 2 built "
-                     "Houdini.")
+            if "houdini" in resolve and "HOUDINI_PY3_BUILD" not in env:
+                stop("Python 3 built HtoA [%s] cannot work with "
+                     "Python 2 built Houdini [%s]."
+                     % (resolve["arnold_htoa"].version,
+                        resolve["houdini"].version))
+        else:
+            if "houdini" in resolve and "HOUDINI_PY3_BUILD" in env:
+                stop("Python 2 built HtoA [%s] cannot work with "
+                     "Python 3 built Houdini [%s]."
+                     % (resolve["arnold_htoa"].version,
+                        resolve["houdini"].version))
 
         env.HTOA_ROOT = htoa_root
 
