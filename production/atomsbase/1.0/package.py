@@ -1,17 +1,26 @@
 
 name = "atomsbase"
 
-version = "1.0-m2"
+version = "1.0-m3"
 
 description = "Atoms Crowd generic environment setup"
 
 build_command = False
 
 
-def commands():
+def pre_commands():
     env = globals()["env"]
-    system = globals()["system"]
+    stop = globals()["stop"]
     resolve = globals()["resolve"]
+    building = globals()["building"]
+
+    def is_dependent_in_context(dep_name):
+        return ((building and env.REZ_BUILD_PROJECT_NAME == dep_name)
+                or (not building and dep_name in resolve))
+
+    if not is_dependent_in_context("atomsvfx") \
+            and not is_dependent_in_context("atomscrowd"):
+        stop("No atoms-crowd package resolved for setting 'ATOMS_ROOT' var.")
 
     if "atomsvfx" in resolve:
         env.ATOMS_ROOT = "{env.REZ_ATOMSVFX_ROOT}"
@@ -19,8 +28,15 @@ def commands():
     elif "atomscrowd" in resolve:
         env.ATOMS_ROOT = "{env.REZ_ATOMSCROWD_ROOT}"
 
-    else:
-        stop("No atoms-crowd package resolved for setting 'ATOMS_ROOT' var.")
+    else:  # is building 'atomsvfx' or 'atomscrowd'
+        env.ATOMS_ROOT = "%s/%s" % (env.REZ_BUILD_PATH,
+                                    env.REZ_BUILD_VARIANT_SUBPATH)
+
+
+def commands():
+    env = globals()["env"]
+    system = globals()["system"]
+    resolve = globals()["resolve"]
 
     env.ATOMS_DATA = "{env.ATOMS_ROOT}/data"
     env.ATOMS_FONTS = "{env.ATOMS_ROOT}/fonts"
