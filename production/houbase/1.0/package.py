@@ -80,14 +80,22 @@ def commands():
 
     # Expands to sub-dir of HOUDINI_PATH
     env.HOUDINI_MENU_PATH.append("@")
-    env.HOUDINI_VEX_PATH.append("@/vex")
+    env.HOUDINI_DSO_PATH.append("@/dso")
     env.HOUDINI_OCL_PATH.append("@/ocl")
-    env.HOUDINI_GLSL_PATH.append("@/ogl2")
+    env.HOUDINI_VEX_PATH.append("@/vex")
+    env.HOUDINI_GLSL_PATH.append("@/glsl")
+    env.HOUDINI_SOHO_PATH.append("@/soho")
+    env.HOUDINI_SCRIPT_PATH.append("@/scripts")
     env.HOUDINI_OTLSCAN_PATH.append("@/otls")
+    env.HOUDINI_TOOLBAR_PATH.append("@/toolbar")
 
     # Append "default" path for the given variable
     env.HOUDINI_PATH.append("&")
+    env.HOUDINI_MENU_PATH.append("&")
     env.HOUDINI_DSO_PATH.append("&")
+    env.HOUDINI_OCL_PATH.append("&")
+    env.HOUDINI_VEX_PATH.append("&")
+    env.HOUDINI_GLSL_PATH.append("&")
     env.HOUDINI_SOHO_PATH.append("&")
     env.HOUDINI_SCRIPT_PATH.append("&")
     env.HOUDINI_OTLSCAN_PATH.append("&")
