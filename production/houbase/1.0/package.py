@@ -121,6 +121,9 @@ def commands():
     # "4" : timing messages to be printed
     # env.HOUDINI_DSO_ERROR = "2"
 
+    # Disable anonymous usage statistics collection entirely.
+    env.HOUDINI_ANONYMOUS_STATISTICS = "0"
+
     # version range specific
     hou_version_info = [int(v) for v in str(env.HOUDINI_VERSION).split(".")]
 
