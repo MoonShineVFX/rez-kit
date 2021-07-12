@@ -8,7 +8,9 @@ description = "SideFX Houdini generic environment setup"
 build_command = False
 
 
-def commands():
+def pre_commands():
+    import os
+
     env = globals()["env"]
     stop = globals()["stop"]
     alias = globals()["alias"]
@@ -23,24 +25,46 @@ def commands():
         int(t) for t in
         resolve["houdini"].version.as_tuple()[:3]  # no pkg ver
     ]
-    env.HOUDINI_VERSION = "{}.{}.{}".format(*hou_version_info)
+    hou_version_str = "{}.{}.{}".format(*hou_version_info)
 
     if system.platform == "windows":
-        env.HOUDINI_LOCATION = "C:/Program Files/Side Effects Software/"\
-                               "Houdini {env.HOUDINI_VERSION}"
+        hou_root = ("C:/Program Files/Side Effects Software/Houdini %s"
+                    % hou_version_str)
 
         # When start dir is at root drive e.g. "F:", OTLs may fail to load
         # on startup with errors like:
-        #   "ImportError: No module named sidefx_stroke"
+        #
+        #   ImportError: No module named sidefx_stroke"
+        #   ...
+        #   'module' object has no attribute 'createViewerStateTemplate'
+        #   ...
+        #
         alias("houdinifx", "start /d %USERPROFILE% houdinifx")
 
     elif system.platform == "linux":
-        pass
+        hou_root = ""
+        stop("Houdini %s installed location root not set." % hou_version_str)
 
     elif system.platform == "osx":
-        pass
+        hou_root = ""
+        stop("Houdini %s installed location root not set." % hou_version_str)
 
-    env.PATH.append("{env.HOUDINI_LOCATION}/bin")
+    else:
+        hou_root = ""
+        stop("Unknown system platform.")
+
+    env.HOUDINI_ROOT = hou_root
+    env.HOUDINI_VERSION = hou_version_str
+
+    # check py3 via $HHP (the path to Houdini’s python libraries)
+    if os.path.isdir(os.path.join(hou_root, "houdini", "python3.7libs")):
+        env.HOUDINI_PY3_BUILD = "1"
+
+
+def commands():
+    env = globals()["env"]
+
+    env.PATH.append("{env.HOUDINI_ROOT}/bin")
 
     # Disable local .env file
     env.HOUDINI_NO_ENV_FILE = "1"
@@ -81,5 +105,7 @@ def commands():
     # env.HOUDINI_DSO_ERROR = "2"
 
     # version range specific
+    hou_version_info = [int(v) for v in str(env.HOUDINI_VERSION).split(".")]
+
     if hou_version_info[:2] >= [17, 5]:
         env.PDG_USE_PDGNET = "1"
