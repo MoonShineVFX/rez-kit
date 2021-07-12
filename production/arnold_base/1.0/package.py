@@ -16,7 +16,11 @@ def pre_commands():
 
 
 def commands():
+    import os
+
     env = globals()["env"]
+    stop = globals()["stop"]
+    request = globals()["request"]
     resolve = globals()["resolve"]
 
     if "arnold_mtoa" in resolve:
@@ -36,7 +40,19 @@ def commands():
             "1"
 
     if "arnold_htoa" in resolve:
-        env.HTOA_ROOT = "{env.REZ_ARNOLD_HTOA_ROOT}"
+        htoa_root = str(env.REZ_ARNOLD_HTOA_ROOT)
+
+        # check py3 via lib dir
+        #   - py3 support starting from htoa-5.6.3.0 [htoa#1347]
+        #   - https://arnoldsupport.com/2021/05/02/htoa-and-python-3
+        if os.path.isdir(os.path.join(htoa_root, "python3.7libs")):
+            env.HTOA_PY3_BUILD = "1"
+
+            if "houdini" in request and "HOUDINI_PY3_BUILD" not in env:
+                stop("Python 3 built HtoA cannot work with Python 2 built "
+                     "Houdini.")
+
+        env.HTOA_ROOT = htoa_root
 
         env.PATH.prepend("{env.HTOA_ROOT}/scripts/bin")
         env.HOUDINI_PATH.prepend("{env.HTOA_ROOT}")
