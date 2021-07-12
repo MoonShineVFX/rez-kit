@@ -1,7 +1,7 @@
 
 name = "atomsbase"
 
-version = "1.0-m1"
+version = "1.0-m2"
 
 description = "Atoms Crowd generic environment setup"
 
@@ -13,10 +13,18 @@ def commands():
     system = globals()["system"]
     resolve = globals()["resolve"]
 
-    env.ATOMS_ROOT = "{root}"
-    env.ATOMS_DATA = "{root}/data"
-    env.ATOMS_FONTS = "{root}/fonts"
-    env.ATOMS_GLSL_PATH = "{root}/glsl"
+    if "atomsvfx" in resolve:
+        env.ATOMS_ROOT = "{env.REZ_ATOMSVFX_ROOT}"
+
+    elif "atomscrowd" in resolve:
+        env.ATOMS_ROOT = "{env.REZ_ATOMSCROWD_ROOT}"
+
+    else:
+        stop("No atoms-crowd package resolved for setting 'ATOMS_ROOT' var.")
+
+    env.ATOMS_DATA = "{env.ATOMS_ROOT}/data"
+    env.ATOMS_FONTS = "{env.ATOMS_ROOT}/fonts"
+    env.ATOMS_GLSL_PATH = "{env.ATOMS_ROOT}/glsl"
     env.ATOMS_GLSL_DISABLE_LIGHTS = "0"
     env.QT_PYTHON_API = "PySide2"
 
@@ -31,75 +39,81 @@ def commands():
         # env.MAYA_MODULE_PATH.prepend("{root}")
 
         if system.platform == "windows":
-            env.PATH.prepend("{root}/bin")
-            env.PATH.prepend("{root}/bin/${env.MAYA_VERSION}")
-            env.PYTHONPATH.prepend("{root}/python/${env.MAYA_VERSION}")
+            env.PATH.prepend(
+                "{env.ATOMS_ROOT}/bin")
+            env.PATH.prepend(
+                "{env.ATOMS_ROOT}/bin/${env.MAYA_VERSION}")
+            env.PYTHONPATH.prepend(
+                "{env.ATOMS_ROOT}/python/${env.MAYA_VERSION}")
 
         # plug-ins
-        env.MAYA_PLUG_IN_PATH.prepend("{root}/plug-ins/${env.MAYA_VERSION}")
+        env.MAYA_PLUG_IN_PATH.prepend(
+            "{env.ATOMS_ROOT}/plug-ins/${env.MAYA_VERSION}")
         # scripts
-        env.PYTHONPATH.prepend("{root}/scripts")
-        env.MAYA_SCRIPT_PATH.prepend("{root}/scripts")
+        env.PYTHONPATH.prepend(
+            "{env.ATOMS_ROOT}/scripts")
+        env.MAYA_SCRIPT_PATH.prepend(
+            "{env.ATOMS_ROOT}/scripts")
         # presets
-        env.MAYA_PRESET_PATH.prepend("{root}/presets")
+        env.MAYA_PRESET_PATH.prepend(
+            "{env.ATOMS_ROOT}/presets")
         # icons
-        env.XBMLANGPATH.prepend("{root}/icons")
+        env.XBMLANGPATH.prepend(
+            "{env.ATOMS_ROOT}/icons")
 
         if "arnold_core" in resolve:
             env.ATOMSARNOLD_PROCEDURAL_PATH = (
-                "{root}/arnold/${env.ARNOLD_CORE_VERSION}/${env.MAYA_VERSION}/"
-                "procedural/AtomsArnoldProcedural.dll")
+                "{env.ATOMS_ROOT}/arnold/${env.ARNOLD_CORE_VERSION}/"
+                "${env.MAYA_VERSION}/procedural/AtomsArnoldProcedural.dll")
             env.ARNOLD_PLUGIN_PATH.prepend(
-                "{root}/arnold/${env.ARNOLD_CORE_VERSION}/${env.MAYA_VERSION}/"
-                "procedural")
+                "{env.ATOMS_ROOT}/arnold/${env.ARNOLD_CORE_VERSION}/"
+                "${env.MAYA_VERSION}/procedural")
             env.MTOA_EXTENSIONS_PATH.prepend(
-                "{root}/arnold/${env.ARNOLD_CORE_VERSION}/${env.MAYA_VERSION}")
+                "{env.ATOMS_ROOT}/arnold/${env.ARNOLD_CORE_VERSION}/"
+                "${env.MAYA_VERSION}")
 
         if "redshift" in resolve:
             env.REDSHIFT_MAYAEXTENSIONSPATH.prepend(
-                "{root}/redshift/${REZ_REDSHIFT_VERSION}/${env.MAYA_VERSION}")
+                "{env.ATOMS_ROOT}/redshift/${REZ_REDSHIFT_VERSION}/"
+                "${env.MAYA_VERSION}")
             env.REDSHIFT_PROCEDURALSPATH.prepend(
-                "{root}/redshift/${REZ_REDSHIFT_VERSION}/${env.MAYA_VERSION}/"
-                "procedural")
+                "{env.ATOMS_ROOT}/redshift/${REZ_REDSHIFT_VERSION}/"
+                "${env.MAYA_VERSION}/procedural")
 
         if "vray" in resolve:
             env.PATH.prepend(
-                "{root}/vray/${env.VRAY_VERSION}/${env.MAYA_VERSION}"
-            )
+                "{env.ATOMS_ROOT}/vray/${env.VRAY_VERSION}/"
+                "${env.MAYA_VERSION}")
             env.MAYA_PLUG_IN_PATH.prepend(
-                "{root}/vray/${env.VRAY_VERSION}/2017/${env.MAYA_VERSION}"
-            )
+                "{env.ATOMS_ROOT}/vray/${env.VRAY_VERSION}/"
+                "${env.MAYA_VERSION}/maya")
             env.VRAY_PLUGINS_x64.prepend(
-                "{root}/vray/${env.VRAY_VERSION}/2017"
-            )
-            env.VRAY_FOR_MAYA2017_PLUGINS_x64.prepend(
-                "{root}/vray/${env.VRAY_VERSION}/${env.MAYA_VERSION}"
-            )
+                "{env.ATOMS_ROOT}/vray/${env.VRAY_VERSION}/"
+                "${env.MAYA_VERSION}")
 
         if "renderman" in resolve:
             env.ATOMS_RMAN_PROCEDURAL = (
-                "{root}/rman/${RENDERMAN_VERSION}/${env.MAYA_VERSION}/"
-                "AtomsRManProcedural.dll"
-            )
+                "{env.ATOMS_ROOT}/rman/${RENDERMAN_VERSION}/"
+                "${env.MAYA_VERSION}/AtomsRManProcedural.dll")
             env.RFM_PLUGINS_PATH = (
-                "{root}/rman/${RENDERMAN_VERSION}/${env.MAYA_VERSION}"
-            )
+                "{env.ATOMS_ROOT}/rman/${RENDERMAN_VERSION}/"
+                "${env.MAYA_VERSION}")
 
-        env.MAYA_RENDER_DESC_PATH.prepend("{root}/renderDesc")
+        env.MAYA_RENDER_DESC_PATH.prepend("{env.ATOMS_ROOT}/renderDesc")
 
     # Houdini
 
     if "houdini" in resolve:
 
         if system.platform == "windows":
-            env.PATH.prepend("{root}/bin")
-            env.PYTHONPATH.prepend("{root}/scripts")
+            env.PATH.prepend("{env.ATOMS_ROOT}/bin")
+            env.PYTHONPATH.prepend("{env.ATOMS_ROOT}/scripts")
         else:
-            env.PYTHONPATH.prepend("{root}/scripts")
-            env.PYTHONPATH.prepend("{root}/python")
-            env.LD_LIBRARY_PATH.prepend("{root}/lib")
+            env.PYTHONPATH.prepend("{env.ATOMS_ROOT}/scripts")
+            env.PYTHONPATH.prepend("{env.ATOMS_ROOT}/python")
+            env.LD_LIBRARY_PATH.prepend("{env.ATOMS_ROOT}/lib")
 
-        env.HOUDINI_PATH.prepend("{root}")
+        env.HOUDINI_PATH.prepend("{env.ATOMS_ROOT}")
 
         if "arnold_core" in resolve:
             env.ARNOLD_VERSION = "${env.ARNOLD_CORE_VERSION}"

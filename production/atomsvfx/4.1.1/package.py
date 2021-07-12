@@ -14,6 +14,7 @@ requires = [
     "~arnold_core-5.1.1.1+<=6.2.1.1",
     "~redshift-3.0.36|3.0.44|3.0.45|3.0.49",
     "atomsbase-1",
+    "!atomscrowd",
 ]
 
 variants = [

@@ -16,6 +16,7 @@ requires = [
     # NOTE: redshift-3 were custom builds kindly provided by Atoms support
     #   and only for maya-2020.
     "atomsbase-1",
+    "!atomsvfx",
 ]
 
 variants = [
