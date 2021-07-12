@@ -15,8 +15,8 @@ def pre_commands():
     building = globals()["building"]
 
     def is_dependent_in_context(dep_name):
-        return ((building and env.REZ_BUILD_PROJECT_NAME == dep_name)
-                or (not building and dep_name in resolve))
+        return (dep_name in resolve
+                or (building and env.REZ_BUILD_PROJECT_NAME == dep_name))
 
     if not is_dependent_in_context("atomsvfx") \
             and not is_dependent_in_context("atomscrowd"):

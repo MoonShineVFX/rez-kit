@@ -22,8 +22,8 @@ def pre_commands():
         return [int(t) for t in str(env_var).rsplit("-")[0].split(".")]
 
     def is_dependent_in_context(dep_name):
-        return ((building and env.REZ_BUILD_PROJECT_NAME == dep_name)
-                or (not building and dep_name in resolve))
+        return (dep_name in resolve
+                or (building and env.REZ_BUILD_PROJECT_NAME == dep_name))
 
     if not is_dependent_in_context("houdini"):
         stop("Package 'houdini' is not in context. "
