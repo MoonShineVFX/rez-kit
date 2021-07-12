@@ -1,5 +1,5 @@
 
-name = "arnold_usd"
+name = "usd_arnold"
 
 version = "6.0.4.0-m1"
 

@@ -12,7 +12,7 @@ _data = {
 requires = [
     "arnold_core-6.0.3.0",
     "~openvdb-4.0.0",
-    "~arnold_usd-6.0.3.0",  # 2056d6bf (!=6.0.3.0)
+    "~usd_arnold-6.0.3.0",  # 2056d6bf (!=6.0.3.0)
 ]
 
 variants = [

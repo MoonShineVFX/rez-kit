@@ -11,7 +11,7 @@ _data = {
 
 requires = [
     "arnold_core-6.2.0.1",
-    "~arnold_usd-6.2.0.1",  # 67a96b94 (USD v20.11)
+    "~usd_arnold-6.2.0.1",  # 67a96b94 (USD v20.11)
     "~openvdb-4.0.0",
 ]
 
