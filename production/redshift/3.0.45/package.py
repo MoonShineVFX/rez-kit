@@ -1,7 +1,7 @@
 
 name = "redshift"
 
-version = "3.0.45-m1"
+version = "3.0.45-m2"
 
 _data = {
     # Allzpark
@@ -39,7 +39,7 @@ def commands():
 
         # plug-ins
         env.MAYA_PLUG_IN_PATH.prepend(
-            "{root}/Plugins/Maya/${env.MAYA_VERSION}/nt-x86-64")
+            "{root}/Plugins/Maya/{env.MAYA_VERSION}/nt-x86-64")
         # scripts
         env.PYTHONPATH.prepend(
             "{root}/Plugins/Maya/Common/scripts")
@@ -52,7 +52,7 @@ def commands():
         env.MAYA_CUSTOM_TEMPLATE_PATH.prepend(
             "{root}/Plugins/Maya/Common/scripts/NETemplates")
         env.REDSHIFT_MAYAEXTENSIONSPATH.prepend(
-            "{root}/Plugins/Maya/${env.MAYA_VERSION}/nt-x86-64/extensions")
+            "{root}/Plugins/Maya/{env.MAYA_VERSION}/nt-x86-64/extensions")
         env.REDSHIFT_PROCEDURALSPATH.prepend(
             "{root}/Procedurals")
 

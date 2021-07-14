@@ -1,7 +1,7 @@
 
 name = "atomsbase"
 
-version = "1.0-m3"
+version = "1.0-m4"
 
 description = "Atoms Crowd generic environment setup"
 
@@ -58,13 +58,13 @@ def commands():
             env.PATH.prepend(
                 "{env.ATOMS_ROOT}/bin")
             env.PATH.prepend(
-                "{env.ATOMS_ROOT}/bin/${env.MAYA_VERSION}")
+                "{env.ATOMS_ROOT}/bin/{env.MAYA_VERSION}")
             env.PYTHONPATH.prepend(
-                "{env.ATOMS_ROOT}/python/${env.MAYA_VERSION}")
+                "{env.ATOMS_ROOT}/python/{env.MAYA_VERSION}")
 
         # plug-ins
         env.MAYA_PLUG_IN_PATH.prepend(
-            "{env.ATOMS_ROOT}/plug-ins/${env.MAYA_VERSION}")
+            "{env.ATOMS_ROOT}/plug-ins/{env.MAYA_VERSION}")
         # scripts
         env.PYTHONPATH.prepend(
             "{env.ATOMS_ROOT}/scripts")
@@ -79,41 +79,41 @@ def commands():
 
         if "arnold_core" in resolve:
             env.ATOMSARNOLD_PROCEDURAL_PATH = (
-                "{env.ATOMS_ROOT}/arnold/${env.ARNOLD_CORE_VERSION}/"
-                "${env.MAYA_VERSION}/procedural/AtomsArnoldProcedural.dll")
+                "{env.ATOMS_ROOT}/arnold/{env.ARNOLD_CORE_VERSION}/"
+                "{env.MAYA_VERSION}/procedural/AtomsArnoldProcedural.dll")
             env.ARNOLD_PLUGIN_PATH.prepend(
-                "{env.ATOMS_ROOT}/arnold/${env.ARNOLD_CORE_VERSION}/"
-                "${env.MAYA_VERSION}/procedural")
+                "{env.ATOMS_ROOT}/arnold/{env.ARNOLD_CORE_VERSION}/"
+                "{env.MAYA_VERSION}/procedural")
             env.MTOA_EXTENSIONS_PATH.prepend(
-                "{env.ATOMS_ROOT}/arnold/${env.ARNOLD_CORE_VERSION}/"
-                "${env.MAYA_VERSION}")
+                "{env.ATOMS_ROOT}/arnold/{env.ARNOLD_CORE_VERSION}/"
+                "{env.MAYA_VERSION}")
 
         if "redshift" in resolve:
             env.REDSHIFT_MAYAEXTENSIONSPATH.prepend(
                 "{env.ATOMS_ROOT}/redshift/${REZ_REDSHIFT_VERSION}/"
-                "${env.MAYA_VERSION}")
+                "{env.MAYA_VERSION}")
             env.REDSHIFT_PROCEDURALSPATH.prepend(
                 "{env.ATOMS_ROOT}/redshift/${REZ_REDSHIFT_VERSION}/"
-                "${env.MAYA_VERSION}/procedural")
+                "{env.MAYA_VERSION}/procedural")
 
         if "vray" in resolve:
             env.PATH.prepend(
-                "{env.ATOMS_ROOT}/vray/${env.VRAY_VERSION}/"
-                "${env.MAYA_VERSION}")
+                "{env.ATOMS_ROOT}/vray/{env.VRAY_VERSION}/"
+                "{env.MAYA_VERSION}")
             env.MAYA_PLUG_IN_PATH.prepend(
-                "{env.ATOMS_ROOT}/vray/${env.VRAY_VERSION}/"
-                "${env.MAYA_VERSION}/maya")
+                "{env.ATOMS_ROOT}/vray/{env.VRAY_VERSION}/"
+                "{env.MAYA_VERSION}/maya")
             env.VRAY_PLUGINS_x64.prepend(
-                "{env.ATOMS_ROOT}/vray/${env.VRAY_VERSION}/"
-                "${env.MAYA_VERSION}")
+                "{env.ATOMS_ROOT}/vray/{env.VRAY_VERSION}/"
+                "{env.MAYA_VERSION}")
 
         if "renderman" in resolve:
             env.ATOMS_RMAN_PROCEDURAL = (
                 "{env.ATOMS_ROOT}/rman/${RENDERMAN_VERSION}/"
-                "${env.MAYA_VERSION}/AtomsRManProcedural.dll")
+                "{env.MAYA_VERSION}/AtomsRManProcedural.dll")
             env.RFM_PLUGINS_PATH = (
                 "{env.ATOMS_ROOT}/rman/${RENDERMAN_VERSION}/"
-                "${env.MAYA_VERSION}")
+                "{env.MAYA_VERSION}")
 
         env.MAYA_RENDER_DESC_PATH.prepend("{env.ATOMS_ROOT}/renderDesc")
 
@@ -132,7 +132,7 @@ def commands():
         env.HOUDINI_PATH.prepend("{env.ATOMS_ROOT}")
 
         if "arnold_core" in resolve:
-            env.ARNOLD_VERSION = "${env.ARNOLD_CORE_VERSION}"
+            env.ARNOLD_VERSION = "{env.ARNOLD_CORE_VERSION}"
 
         if "redshift" in resolve:
             pass
