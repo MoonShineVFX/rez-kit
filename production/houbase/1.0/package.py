@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m2"
+version = "1.0-m3"
 
 description = "SideFX Houdini generic environment setup"
 
@@ -29,7 +29,7 @@ def pre_commands():
         stop("Package 'houdini' is not in context. "
              "Houdini executable path cannot be composed.")
 
-    if building:  # is building 'houdini'
+    if building and str(env.REZ_BUILD_PROJECT_NAME) == "houdini":
         hou_version_info = env_version_split(env.REZ_BUILD_PROJECT_VERSION)
     else:
         hou_version_info = env_version_split(env.REZ_HOUDINI_VERSION)
