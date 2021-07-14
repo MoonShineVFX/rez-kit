@@ -27,7 +27,7 @@ git_url = "https://github.com/qLab/qLib.git"
 def version():
     import os
 
-    package_ver = "m2"
+    package_ver = "m3"
     payload_ver = os.getenv("REZ_DELIVER_PKG_PAYLOAD_VER")
 
     if payload_ver:
@@ -58,10 +58,4 @@ build_command = "python {root}/rezbuild.py {install}"
 
 def commands():
     env = globals()["env"]
-
-    env.QLIB = "{root}/payload"
-    env.QOTL = "{root}/payload/otls"
-    env.HOUDINI_OTLSCAN_PATH.prepend("{root}/payload/otls/experimental")
-    env.HOUDINI_OTLSCAN_PATH.prepend("{root}/payload/otls/future")
-    env.HOUDINI_OTLSCAN_PATH.prepend("{root}/payload/otls/base")
-    env.HOUDINI_PATH.prepend("{root}/payload")
+    env.HOUDINI_PACKAGE_DIR.prepend("{root}/payload")
