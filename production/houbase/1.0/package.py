@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m3"
+version = "1.0-m4"
 
 description = "SideFX Houdini generic environment setup"
 
@@ -13,7 +13,6 @@ def pre_commands():
 
     env = globals()["env"]
     stop = globals()["stop"]
-    alias = globals()["alias"]
     system = globals()["system"]
     resolve = globals()["resolve"]
     building = globals()["building"]
@@ -39,16 +38,6 @@ def pre_commands():
     if system.platform == "windows":
         hou_root = ("C:/Program Files/Side Effects Software/Houdini %s"
                     % hou_version_str)
-
-        # When start dir is at root drive e.g. "F:", OTLs may fail to load
-        # on startup with errors like:
-        #
-        #   ImportError: No module named sidefx_stroke"
-        #   ...
-        #   'module' object has no attribute 'createViewerStateTemplate'
-        #   ...
-        #
-        alias("houdinifx", "start /d %USERPROFILE% houdinifx")
 
     elif system.platform == "linux":
         hou_root = ""
