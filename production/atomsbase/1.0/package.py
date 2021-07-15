@@ -1,7 +1,7 @@
 
 name = "atomsbase"
 
-version = "1.0-m4"
+version = "1.0-m5"
 
 description = "Atoms Crowd generic environment setup"
 
@@ -43,6 +43,12 @@ def commands():
     env.ATOMS_GLSL_PATH = "{env.ATOMS_ROOT}/glsl"
     env.ATOMS_GLSL_DISABLE_LIGHTS = "0"
     env.QT_PYTHON_API = "PySide2"
+
+    # Disables the fallback to higher priority licenses.
+    #   So when there are no procedural license for rendering, won't fallback
+    #   to use framework/simulation license which often still be needed in
+    #   production time.
+    env.TOOLCHEFS_DISABLE_FORCE_LICENSE = "1"
 
     # Maya
 
