@@ -1,7 +1,7 @@
 
 name = "redshift"
 
-version = "3.0.44-m2"
+version = "3.0.44-m3"
 
 _data = {
     # Allzpark
@@ -10,7 +10,7 @@ _data = {
 }
 
 requires = [
-    "~maya-2014+<=2020",
+    "~maya-2014+<2021",
     "~houdini-"
     "17.0.506|17.5.460|"
     "18.0.597|"

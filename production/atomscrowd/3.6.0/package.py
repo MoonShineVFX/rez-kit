@@ -1,7 +1,7 @@
 
 name = "atomscrowd"
 
-version = "3.6.0-m1"
+version = "3.6.0-m2"
 
 _data = {
     # Allzpark
@@ -10,8 +10,8 @@ _data = {
 }
 
 requires = [
-    "~maya-2017+<=2020",
-    "~arnold_core-5.1.1.1+<=6.0.4.0",
+    "~maya-2017+<2021",
+    "~arnold_core-5.1.1.1+<=6.0.4.0_",
     "~redshift-2.6.19|2.6.41|2.6.51",
     "atomsbase-1",
     "!atomsvfx",
