@@ -1,7 +1,7 @@
 
 name = "arnold_base"
 
-version = "1.0-m2"
+version = "1.0-m3"
 
 build_command = False
 
@@ -27,6 +27,8 @@ def commands():
 
         env.PATH.prepend(
             "{env.MTOA_ROOT}/bin")
+        env.PYTHONPATH.prepend(
+            "{env.MTOA_ROOT}/scripts")
         env.MAYA_PLUG_IN_PATH.prepend(
             "{env.MTOA_ROOT}/plug-ins")
         env.MAYA_SCRIPT_PATH.prepend(
@@ -64,6 +66,7 @@ def commands():
         env.HTOA_ROOT = htoa_root
 
         env.PATH.prepend("{env.HTOA_ROOT}/scripts/bin")
+        env.PYTHONPATH.prepend("{env.HTOA_ROOT}/scripts/python")
         env.HOUDINI_PATH.prepend("{env.HTOA_ROOT}")
 
         # Modifying individual HOUDINI_*_PATHs
