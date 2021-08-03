@@ -1,7 +1,7 @@
 
 name = "arnold_base"
 
-version = "1.0-m1"
+version = "1.0-m2"
 
 build_command = False
 
@@ -27,6 +27,8 @@ def commands():
 
         env.PATH.prepend(
             "{env.MTOA_ROOT}/bin")
+        env.MAYA_PLUG_IN_PATH.prepend(
+            "{env.MTOA_ROOT}/plug-ins")
         env.MAYA_SCRIPT_PATH.prepend(
             "{env.MTOA_ROOT}/scripts/mtoa/mel")
         env.MAYA_CUSTOM_TEMPLATE_PATH.prepend(
