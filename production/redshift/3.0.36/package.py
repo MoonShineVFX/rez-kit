@@ -1,7 +1,7 @@
 
 name = "redshift"
 
-version = "3.0.36-m4"
+version = "3.0.36-m5"
 
 _data = {
     # Allzpark
@@ -28,6 +28,8 @@ build_command = "python -m rezutil build {root} --use-zip"
 def commands():
     env = globals()["env"]
     resolve = globals()["resolve"]
+
+    env.REDSHIFT_VERSION = str(env.REZ_REDSHIFT_VERSION).rsplit("-m", 1)[0]
 
     # Important:
     #   The foundation of all other redshift env vars

@@ -1,7 +1,7 @@
 
 name = "atomsbase"
 
-version = "1.0-m5"
+version = "1.0-m6"
 
 description = "Atoms Crowd generic environment setup"
 
@@ -96,10 +96,10 @@ def commands():
 
         if "redshift" in resolve:
             env.REDSHIFT_MAYAEXTENSIONSPATH.prepend(
-                "{env.ATOMS_ROOT}/redshift/${REZ_REDSHIFT_VERSION}/"
+                "{env.ATOMS_ROOT}/redshift/${REDSHIFT_VERSION}/"
                 "{env.MAYA_VERSION}")
             env.REDSHIFT_PROCEDURALSPATH.prepend(
-                "{env.ATOMS_ROOT}/redshift/${REZ_REDSHIFT_VERSION}/"
+                "{env.ATOMS_ROOT}/redshift/${REDSHIFT_VERSION}/"
                 "{env.MAYA_VERSION}/procedural")
 
         if "vray" in resolve:
