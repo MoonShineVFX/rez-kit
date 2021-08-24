@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m4"
+version = "1.0-m5"
 
 description = "SideFX Houdini generic environment setup"
 
@@ -55,7 +55,10 @@ def pre_commands():
     env.HOUDINI_VERSION = hou_version_str
 
     # check py3 via $HHP (the path to Houdini’s python libraries)
-    if os.path.isdir(os.path.join(hou_root, "houdini", "python3.7libs")):
+    #   notice that even houdini is not been built with py3, it may still
+    #   have `python3.7libs` folder. need to check the content for sure.
+    py3_feature = os.path.join(hou_root, "houdini", "python3.7libs", "hou.py")
+    if os.path.isfile(py3_feature):
         env.HOUDINI_PY3_BUILD = "1"
 
 
