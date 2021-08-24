@@ -1,7 +1,7 @@
 
 name = "houdini"
 
-version = "18.5.532-m4"
+version = "18.5.532-m5"
 
 description = "SideFX Houdini"
 
@@ -19,6 +19,7 @@ requires = [
 
 tools = [
     "houdinifx",
+    "hython",
 ]
 
 

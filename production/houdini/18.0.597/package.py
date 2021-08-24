@@ -1,7 +1,7 @@
 
 name = "houdini"
 
-version = "18.0.597-m1"
+version = "18.0.597-m2"
 
 description = "SideFX Houdini"
 
@@ -18,8 +18,8 @@ requires = [
 
 tools = [
     "houdinifx",
+    "hython",
 ]
-
 
 private_build_requires = ["rezutil-1"]
 build_command = "python -m rezutil build {root}"
