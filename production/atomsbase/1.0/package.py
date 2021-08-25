@@ -1,7 +1,7 @@
 
 name = "atomsbase"
 
-version = "1.0-m6"
+version = "1.0-m7"
 
 description = "Atoms Crowd generic environment setup"
 
@@ -24,17 +24,24 @@ def pre_commands():
 
     if "atomsvfx" in resolve:
         env.ATOMS_ROOT = "{env.REZ_ATOMSVFX_ROOT}"
+        env.ATOMS_VERSION = "{env.REZ_ATOMSVFX_VERSION}".rsplit("-m", 1)[0]
 
     elif "atomscrowd" in resolve:
         env.ATOMS_ROOT = "{env.REZ_ATOMSCROWD_ROOT}"
+        env.ATOMS_VERSION = "{env.REZ_ATOMSCROWD_VERSION}".rsplit("-m", 1)[0]
 
     else:  # is building 'atomsvfx' or 'atomscrowd'
         env.ATOMS_ROOT = "%s/%s" % (env.REZ_BUILD_PATH,
                                     env.REZ_BUILD_VARIANT_SUBPATH)
+        env.ATOMS_VERSION = \
+            str(env.REZ_BUILD_PROJECT_VERSION).rsplit("-m", 1)[0]
 
 
 def commands():
+    import os
+
     env = globals()["env"]
+    stop = globals()["stop"]
     system = globals()["system"]
     resolve = globals()["resolve"]
 
@@ -126,6 +133,25 @@ def commands():
     # Houdini
 
     if "houdini" in resolve:
+        # Here we check for whether Atoms is for Houdini Python3 build
+        #
+        #   The difference between Atoms-Houdini Py2 & Py3 build is the .pyd
+        #   module contains binary string 'python3'. We chose to check with
+        #   `_AtomsModules.pyd` is because it's the smallest file (33kb).
+        #
+        #   The first Python 3 build supported Atoms version is 4.3.0,
+        #   for Houdini 18.5.633.
+        #
+        atoms_root = str(env.ATOMS_ROOT)
+        atoms_pyd = os.path.join(atoms_root, "scripts", "_AtomsModules.pyd")
+        if os.path.isfile(atoms_pyd):
+            with open(atoms_pyd, "rb") as f:
+                is_py3_build = b"python3" in f.read()
+
+            if is_py3_build and "HOUDINI_PY3_BUILD" not in env:
+                stop("Python 3 built Atoms [%s] cannot work with "
+                     "Python 2 built Houdini [%s]."
+                     % (env.ATOMS_VERSION, resolve["houdini"].version))
 
         if system.platform == "windows":
             env.PATH.prepend("{env.ATOMS_ROOT}/bin")

@@ -1,7 +1,7 @@
 
 name = "atomsvfx"
 
-version = "4.3.0-m1"
+version = "4.3.0-m2"
 
 _data = {
     # Allzpark
@@ -22,12 +22,12 @@ requires = [
 
 variants = [
     ["platform-*", "maya"],
-    # ["platform-*", "houdini-18.5.408"],
-    # ["platform-*", "houdini-18.5.499"],
-    # ["platform-*", "houdini-18.5.532"],
-    # ["platform-*", "houdini-18.5.563"],
-    # ["platform-*", "houdini-18.5.596"],
-    # ["platform-*", "houdini-18.5.633"],  # py3
+    ["platform-*", "houdini-18.5.408"],
+    ["platform-*", "houdini-18.5.499"],
+    ["platform-*", "houdini-18.5.532"],
+    ["platform-*", "houdini-18.5.563"],
+    ["platform-*", "houdini-18.5.596"],
+    ["platform-*", "houdini-18.5.633"],  # py3
 ]
 
 private_build_requires = ["rezutil-1"]
