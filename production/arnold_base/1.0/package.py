@@ -95,4 +95,4 @@ def commands():
         #     "{env.HTOA_ROOT}/config/Icons")
 
         # "0" : disable the shader registration log messages at startup
-        env.HTOA_STARTUP_LOG = "0"
+        env.HTOA_STARTUP_LOG = "1"

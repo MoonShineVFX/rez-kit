@@ -86,7 +86,7 @@ def commands():
     # "2" : more verbose errors to be printed
     # "3" : all DSO related messages to be printed
     # "4" : timing messages to be printed
-    # env.HOUDINI_DSO_ERROR = "2"
+    env.HOUDINI_DSO_ERROR = "2"
 
     # Disable anonymous usage statistics collection entirely.
     env.HOUDINI_ANONYMOUS_STATISTICS = "0"
