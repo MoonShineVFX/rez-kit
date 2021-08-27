@@ -1,7 +1,7 @@
 
 name = "maya"
 
-version = "2018-m2"
+version = "2018-m3"
 
 description = "Autodesk Maya 2018"
 
@@ -26,7 +26,7 @@ private_build_requires = ["rezutil-1"]
 build_command = "python -m rezutil build {root}"
 
 
-def commands():
+def pre_commands():
     env = globals()["env"]
     system = globals()["system"]
 
@@ -34,18 +34,30 @@ def commands():
 
     if system.platform == "windows":
         env.MAYA_LOCATION = "C:/Program Files/Autodesk/Maya{env.MAYA_VERSION}"
-        env.PATH.append("C:/Program Files/Common Files/Autodesk Shared/")
-        env.PATH.append("C:/Program Files (x86)/Autodesk/Backburner/")
 
     elif system.platform == "linux":
         env.MAYA_LOCATION = "/usr/autodesk/maya{env.MAYA_VERSION}"
 
-    elif system.platform == "darwin":
-        env.MAYA_LOCATION = "/Applications/Autodesk/maya{env.MAYA_VERSION}"\
+    elif system.platform == "osx":
+        env.MAYA_LOCATION = "/Applications/Autodesk/maya{env.MAYA_VERSION}" \
                             "/Maya.app/Contents"
-        env.DYLD_LIBRARY_PATH = "{env.MAYA_LOCATION}/MacOS"
+
+
+def commands():
+    env = globals()["env"]
+    system = globals()["system"]
 
     env.PATH.append("{env.MAYA_LOCATION}/bin")
+
+    if system.platform == "windows":
+        env.PATH.append("C:/Program Files/Common Files/Autodesk Shared/")
+        env.PATH.append("C:/Program Files (x86)/Autodesk/Backburner/")
+
+    elif system.platform == "linux":
+        pass
+
+    elif system.platform == "osx":
+        env.DYLD_LIBRARY_PATH = "{env.MAYA_LOCATION}/MacOS"
 
     # Override some Maya default settings (optimization)
     # todo: These might need to be moved out to be left to company specific choices
