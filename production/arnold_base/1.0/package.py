@@ -65,7 +65,7 @@ def commands():
 
         env.HTOA_ROOT = htoa_root
 
-        env.PATH.prepend("{env.HTOA_ROOT}/scripts/bin")
+        env.PATH.append("{env.HTOA_ROOT}/scripts/bin")
         env.PYTHONPATH.prepend("{env.HTOA_ROOT}/scripts/python")
         env.HOUDINI_PATH.prepend("{env.HTOA_ROOT}")
 
