@@ -1,7 +1,7 @@
 
 name = "arnold_base"
 
-version = "1.0-m3"
+version = "1.0-m4"
 
 build_command = False
 
