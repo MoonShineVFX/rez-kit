@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m5"
+version = "1.0-m6"
 
 description = "SideFX Houdini generic environment setup"
 
