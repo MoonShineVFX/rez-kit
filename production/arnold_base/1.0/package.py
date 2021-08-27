@@ -69,7 +69,7 @@ def commands():
         env.PYTHONPATH.prepend("{env.HTOA_ROOT}/scripts/python")
         env.HOUDINI_PATH.prepend("{env.HTOA_ROOT}")
 
-        # Modifying individual HOUDINI_*_PATHs
+        # Modifying individual HOUDINI_*_PATHs (From Arnold Installation Doc)
         #
         # If you have already used the individual HOUDINI_*_PATH environments for
         # other plugins and scripts, you may find you need to set them for HtoA
@@ -79,20 +79,20 @@ def commands():
         # sure you are appending ";@;&", at the end of its value, or alternatively,
         # add the corresponding HtoA subfolder path to it:
         #
-        env.HOUDINI_DSO_PATH.prepend(
-            "{env.HTOA_ROOT}/dso")
-        env.HOUDINI_SCRIPT_PATH.prepend(
-            "{env.HTOA_ROOT}/scripts")
-        env.HOUDINI_OTLSCAN_PATH.prepend(
-            "{env.HTOA_ROOT}/otls")
-        env.HOUDINI_SOHO_PATH.prepend(
-            "{env.HTOA_ROOT}/soho")
-        env.HOUDINI_TOOLBAR_PATH.prepend(
-            "{env.HTOA_ROOT}/toolbar")
-        env.HOUDINI_UI_PATH.prepend(
-            "{env.HTOA_ROOT}/config")
-        env.HOUDINI_UI_ICON_PATH.prepend(
-            "{env.HTOA_ROOT}/config/Icons")
+        # env.HOUDINI_DSO_PATH.prepend(
+        #     "{env.HTOA_ROOT}/dso")
+        # env.HOUDINI_SCRIPT_PATH.prepend(
+        #     "{env.HTOA_ROOT}/scripts")
+        # env.HOUDINI_OTLSCAN_PATH.prepend(
+        #     "{env.HTOA_ROOT}/otls")
+        # env.HOUDINI_SOHO_PATH.prepend(
+        #     "{env.HTOA_ROOT}/soho")
+        # env.HOUDINI_TOOLBAR_PATH.prepend(
+        #     "{env.HTOA_ROOT}/toolbar")
+        # env.HOUDINI_UI_PATH.prepend(
+        #     "{env.HTOA_ROOT}/config")
+        # env.HOUDINI_UI_ICON_PATH.prepend(
+        #     "{env.HTOA_ROOT}/config/Icons")
 
         # "0" : disable the shader registration log messages at startup
         env.HTOA_STARTUP_LOG = "0"

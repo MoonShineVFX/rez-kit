@@ -70,31 +70,6 @@ def commands():
     # Disable local .env file
     env.HOUDINI_NO_ENV_FILE = "1"
 
-    # Expands to sub-dir of HOUDINI_PATH
-    env.HOUDINI_MENU_PATH.append("@")
-    env.HOUDINI_DSO_PATH.append("@/dso")
-    env.HOUDINI_OCL_PATH.append("@/ocl")
-    env.HOUDINI_VEX_PATH.append("@/vex")
-    env.HOUDINI_GLSL_PATH.append("@/glsl")
-    env.HOUDINI_SOHO_PATH.append("@/soho")
-    env.HOUDINI_SCRIPT_PATH.append("@/scripts")
-    env.HOUDINI_OTLSCAN_PATH.append("@/otls")
-    env.HOUDINI_TOOLBAR_PATH.append("@/toolbar")
-
-    # Append "default" path for the given variable
-    env.HOUDINI_PATH.append("&")
-    env.HOUDINI_MENU_PATH.append("&")
-    env.HOUDINI_DSO_PATH.append("&")
-    env.HOUDINI_OCL_PATH.append("&")
-    env.HOUDINI_VEX_PATH.append("&")
-    env.HOUDINI_GLSL_PATH.append("&")
-    env.HOUDINI_SOHO_PATH.append("&")
-    env.HOUDINI_SCRIPT_PATH.append("&")
-    env.HOUDINI_OTLSCAN_PATH.append("&")
-    env.HOUDINI_TOOLBAR_PATH.append("&")
-    env.HOUDINI_UI_PATH.append("&")
-    env.HOUDINI_UI_ICON_PATH.append("&")
-
     # Force using houdini built-in python (deprecated)
     # env.HOUDINI_USE_HFS_PYTHON = "1"
 
@@ -121,3 +96,29 @@ def commands():
 
     if hou_version_info[:2] >= [17, 5]:
         env.PDG_USE_PDGNET = "1"
+
+
+def post_commands():
+    env = globals()["env"]
+
+    env.HOUDINI_PATH.append("&")
+
+    hou_env = {
+        "HOUDINI_DSO_PATH":         "@/dso",
+        "HOUDINI_GLSL_PATH":        "@/ogl2",
+        "HOUDINI_MENU_PATH":        "@",
+        "HOUDINI_OCL_PATH":         "@/ocl",
+        "HOUDINI_OTLSCAN_PATH":     "@/otls",
+        "HOUDINI_TOOLBAR_PATH":     "@/toolbar",
+        "HOUDINI_SOHO_PATH":        "@/soho",
+        "HOUDINI_SCRIPT_PATH":      "@/scripts",
+        "HOUDINI_UI_PATH":          "@/config",
+        "HOUDINI_UI_ICON_PATH":     "@/config/Icons",
+        "HOUDINI_VEX_PATH":         "@/vex",
+    }
+    for key, sub_dir in hou_env.items():
+        if key in env:
+            # Expands to sub-dir of HOUDINI_PATH
+            env[key].append(sub_dir)
+            # Append "default" path for the given variable
+            env[key].append("&")
