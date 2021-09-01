@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m6"
+version = "1.0-m7"
 
 description = "SideFX Houdini generic environment setup"
 
@@ -101,11 +101,16 @@ def commands():
 def post_commands():
     env = globals()["env"]
 
+    # command tool `hconfig` may complain help file not found if $HFS is
+    #   incorrect or $HFS/houdini is not in $HOUDINI_PATH.
+    env.HOUDINI_PATH.append("{env.HOUDINI_ROOT}/houdini")
     env.HOUDINI_PATH.append("&")
 
+    # use command tool `hconfig` to see all houdini env vars' default value.
+    #
     hou_env = {
         "HOUDINI_DSO_PATH":         "@/dso",
-        "HOUDINI_GLSL_PATH":        "@/ogl2",
+        "HOUDINI_GLSL_PATH":        "@/ogl2",  # or glsl, it's not clear
         "HOUDINI_MENU_PATH":        "@",
         "HOUDINI_OCL_PATH":         "@/ocl",
         "HOUDINI_OTLSCAN_PATH":     "@/otls",
