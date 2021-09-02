@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m7"
+version = "1.0-m8"
 
 description = "SideFX Houdini generic environment setup"
 
@@ -103,7 +103,13 @@ def post_commands():
 
     # command tool `hconfig` may complain help file not found if $HFS is
     #   incorrect or $HFS/houdini is not in $HOUDINI_PATH.
-    env.HOUDINI_PATH.append("{env.HOUDINI_ROOT}/houdini")
+    #
+    # (deprecate)
+    #   adding `{env.HOUDINI_ROOT}/houdini` actually cause problem when
+    #   launching `hython`, and somehow, `hconfig` isn't complaining
+    #   "help file not found" anymore when commenting out this..
+    #
+    # env.HOUDINI_PATH.append("{env.HOUDINI_ROOT}/houdini")
     env.HOUDINI_PATH.append("&")
 
     # use command tool `hconfig` to see all houdini env vars' default value.
