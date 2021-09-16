@@ -1,7 +1,7 @@
 
 name = "redshift"
 
-version = "3.0.44-m4"
+version = "3.0.44-m5"
 
 _data = {
     # Allzpark
@@ -37,7 +37,26 @@ def commands():
     env.REDSHIFT_COREDATAPATH = "{root}"
 
     if "maya" in resolve:
-        env.MAYA_MODULE_PATH.prepend("{root}")
+        env.PATH.prepend("{root}/bin")
+
+        # plug-ins
+        env.MAYA_PLUG_IN_PATH.prepend(
+            "{root}/Plugins/Maya/{env.MAYA_VERSION}/nt-x86-64")
+        # scripts
+        env.PYTHONPATH.prepend(
+            "{root}/Plugins/Maya/Common/scripts")
+        env.MAYA_SCRIPT_PATH.prepend(
+            "{root}/Plugins/Maya/Common/scripts")
+        # icons
+        env.XBMLANGPATH.prepend(
+            "{root}/Plugins/Maya/Common/icons")
+
+        env.MAYA_CUSTOM_TEMPLATE_PATH.prepend(
+            "{root}/Plugins/Maya/Common/scripts/NETemplates")
+        env.REDSHIFT_MAYAEXTENSIONSPATH.prepend(
+            "{root}/Plugins/Maya/{env.MAYA_VERSION}/nt-x86-64/extensions")
+        env.REDSHIFT_PROCEDURALSPATH.prepend(
+            "{root}/Procedurals")
 
     if "houdini" in resolve:
         env.PATH.prepend("{root}/bin")
