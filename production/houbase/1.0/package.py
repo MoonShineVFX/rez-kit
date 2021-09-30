@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m8"
+version = "1.0-m9"
 
 description = "SideFX Houdini generic environment setup"
 
@@ -60,6 +60,12 @@ def pre_commands():
     py3_feature = os.path.join(hou_root, "houdini", "python3.7libs", "hou.py")
     if os.path.isfile(py3_feature):
         env.HOUDINI_PY3_BUILD = "1"
+
+    # to avoid any incompatible between patch versions. e.g. redshift.
+    env.HOUDINI_USER_PREF_DIR = os.path.join(
+        os.path.expanduser("~"),
+        ".houdini%s" % hou_version_str,  # may be hidden
+    )
 
 
 def commands():
