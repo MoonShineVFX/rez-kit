@@ -1,7 +1,7 @@
 
 name = "houbase"
 
-version = "1.0-m9"
+version = "1.0-m10"
 
 description = "SideFX Houdini generic environment setup"
 
@@ -17,8 +17,8 @@ def pre_commands():
     resolve = globals()["resolve"]
     building = globals()["building"]
 
-    def env_version_split(env_var):  # no pkg ver
-        return [int(t) for t in str(env_var).rsplit("-")[0].split(".")]
+    def extract_payload_ver(full_ver):  # no pkg ver
+        return [int(t) for t in str(full_ver).rsplit("-")[0].split(".")]
 
     def is_dependent_in_context(dep_name):
         return (dep_name in resolve
@@ -29,9 +29,9 @@ def pre_commands():
              "Houdini executable path cannot be composed.")
 
     if building and str(env.REZ_BUILD_PROJECT_NAME) == "houdini":
-        hou_version_info = env_version_split(env.REZ_BUILD_PROJECT_VERSION)
+        hou_version_info = extract_payload_ver(env.REZ_BUILD_PROJECT_VERSION)
     else:
-        hou_version_info = env_version_split(env.REZ_HOUDINI_VERSION)
+        hou_version_info = extract_payload_ver(env.REZ_HOUDINI_VERSION)
 
     hou_version_str = "{}.{}.{}".format(*hou_version_info)
 
@@ -60,12 +60,6 @@ def pre_commands():
     py3_feature = os.path.join(hou_root, "houdini", "python3.7libs", "hou.py")
     if os.path.isfile(py3_feature):
         env.HOUDINI_PY3_BUILD = "1"
-
-    # to avoid any incompatible between patch versions. e.g. redshift.
-    env.HOUDINI_USER_PREF_DIR = os.path.join(
-        os.path.expanduser("~"),
-        ".houdini%s" % hou_version_str,  # may be hidden
-    )
 
 
 def commands():
